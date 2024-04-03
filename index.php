@@ -52,6 +52,9 @@ class Simple_Order {
 		a[href="admin.php?page=simple-order-products"] { border-top:1px solid red; }
 		a[href="admin.php?page=simple-order-sell"] { border-top:1px solid red; }
 		a[href="admin.php?page=simple-order-finance-transfer"] { border-top:1px solid red; }
+		.ht_master tr:nth-of-type(even) > td {
+			background-color: #e6ffe6;
+		}
 		</style>';
 		wp_enqueue_style('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.css');
 		wp_enqueue_script('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.js');
