@@ -51,7 +51,7 @@ class Simple_Order_Stores {
 		if (isset($_POST['method'])) {
 			if ($_POST['method'] == 'add') {
 				$wpdb->insert($wpdb->_STORES, [
-					'store_name' => 'toko baru'
+					'store_name' => 'zzz toko baru'
 				]);
 
 				unset($response['headers']);

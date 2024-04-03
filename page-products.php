@@ -37,7 +37,7 @@ class Simple_Order_Products {
 		if (isset($_POST['method'])) {
 			if ($_POST['method'] == 'add') {
 				$wpdb->insert($wpdb->_PRODUCTS, [
-					'product_name' => 'produk baru'
+					'product_name' => 'zzz produk baru'
 				]);
 
 				unset($response['headers']);

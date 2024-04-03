@@ -36,7 +36,7 @@ class Simple_Order_Couriers {
 		if (isset($_POST['method'])) {
 			if ($_POST['method'] == 'add') {
 				$wpdb->insert($wpdb->_COURIERS, [
-					'name' => 'kurir baru'
+					'name' => 'zzz kurir baru'
 				]);
 
 				unset($response['headers']);
