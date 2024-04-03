@@ -32,10 +32,10 @@ class Simple_Order {
 		
 		require_once 'page-dashboard.php';
 		require_once 'page-activity.php';
+		require_once 'page-finance.php';
 		require_once 'page-products.php';
 		require_once 'page-stores.php';
 		require_once 'page-couriers.php';
-		require_once 'page-finance.php';
 		require_once 'page-order-sell.php';
 		require_once 'page-order-buy.php';
 		require_once 'page-order-delivery.php';
