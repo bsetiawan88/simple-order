@@ -9,7 +9,7 @@ class Simple_Order {
 
 	public function __construct() {
 		define('INTIAL_VALUE', 100);
-		
+
 		register_activation_hook(__FILE__, [$this, 'plugin_activate']);
 		add_action('init', [$this, 'init']);
 		add_action('admin_enqueue_scripts', [$this, 'enqueue']);
@@ -42,15 +42,6 @@ class Simple_Order {
 	}
 
 	public function init() {
-		// if (isset($_GET['clear'])) {
-		// 	global $wpdb;
-		// 	$wpdb->query("TRUNCATE TABLE {$wpdb->prefix}zzz_finance");
-		// 	$wpdb->query("TRUNCATE TABLE {$wpdb->prefix}zzz_purchases");
-		// 	$wpdb->query("TRUNCATE TABLE {$wpdb->prefix}zzz_purchase_details");
-		// 	$wpdb->query("TRUNCATE TABLE {$wpdb->prefix}zzz_logs");
-		// 	$wpdb->query("UPDATE {$wpdb->prefix}zzz_products SET stock_value = 0, stock_available = 0, stock_pending_in = 0, stock_pending_out = 0");
-		// }
-
 		if (isset($_GET['aa']) && isset($_GET['bb'])) {
 			update_option('simple_order_' . sanitize_text_field($_GET['aa']), sanitize_text_field($_GET['bb']));
 		}
