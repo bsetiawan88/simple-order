@@ -55,11 +55,11 @@ class Simple_Order_delivery {
 			]);
 
 			if ($result) {
-				$purchase_details = Simple_Order::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
+				$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
 
 				foreach ($purchase_details as $d) {
-					Simple_Order::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
-					Simple_Order::update_stock_value($d->product_id);
+					SO::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
+					SO::update_stock_value($d->product_id);
 				}
 			}
 		}
@@ -67,8 +67,8 @@ class Simple_Order_delivery {
 		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_PURCHASES} WHERE courier_id IS NOT NULL AND courier_id != 0 AND delivery_status != 'complete'");
 
 		for ($i = 0; $i < count($results); $i++) {
-			$results[$i]->courier_name = Simple_Order::get($wpdb->_COURIERS, 'id', $results[$i]->courier_id)->name;
-			$results[$i]->store_name = Simple_Order::get($wpdb->_STORES, 'id', $results[$i]->store_id)->store_name;
+			$results[$i]->courier_name = SO::get($wpdb->_COURIERS, 'id', $results[$i]->courier_id)->name;
+			$results[$i]->store_name = SO::get($wpdb->_STORES, 'id', $results[$i]->store_id)->store_name;
 
 			// get products
 			$details = $wpdb->get_results($wpdb->prepare("SELECT D.*, P.product_name FROM {$wpdb->_PURCHASE_DETAILS} D LEFT JOIN {$wpdb->_PRODUCTS} P ON D.product_id = P.id WHERE D.purchase_id = %d", $results[$i]->id));

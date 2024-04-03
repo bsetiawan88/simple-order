@@ -10,7 +10,7 @@ class Simple_Order_Activity {
 				wp_enqueue_style('simple-order-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
 				wp_enqueue_script('jquery-ui-datepicker');
 				wp_enqueue_style('jquery-style', '//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css');
-				wp_enqueue_script('simple-order-finance', plugin_dir_url(__FILE__) . '/assets/activity.js');
+				wp_enqueue_script('simple-order-finance', plugin_dir_url(SIMPLE_ORDER_PLUGIN_FILE) . 'assets/activity.js');
 			});
 		}
 	}
@@ -30,7 +30,7 @@ class Simple_Order_Activity {
 	public function save_data() {
 		global $wpdb;
 
-		$balance = Simple_Order::get_balance_transfer();
+		$balance = SO::get_balance_transfer();
 		$action = sanitize_text_field($_POST['action']);
 
 		if (method_exists($this, $action)) {
@@ -189,7 +189,7 @@ class Simple_Order_Activity {
 					<input type="hidden" name="action" value="pindah_saldo_tunai" />
 					<div class="form-group">
 						<label for="nominal">Jumlah yang akan dipindah:</label>
-						<input type="number" class="form-control" name="nominal" value="<?php echo Simple_Order::get_balance_cash();?>" required>
+						<input type="number" class="form-control" name="nominal" value="<?php echo SO::get_balance_cash();?>" required>
 					</div>
 					<button type="submit" class="btn btn-primary float-right">Kirim</button>
 				</form>
@@ -290,7 +290,7 @@ class Simple_Order_Activity {
 	public function penambahan_modal() {
 		global $wpdb;
 
-		$balance = Simple_Order::get_balance_transfer();
+		$balance = SO::get_balance_transfer();
 
 		$balance += intval($_POST['penambahan_modal']);
 
@@ -305,7 +305,7 @@ class Simple_Order_Activity {
 	public function pengambilan_laba() {
 		global $wpdb;
 
-		$balance = Simple_Order::get_balance_transfer();
+		$balance = SO::get_balance_transfer();
 
 		$balance -= intval($_POST['pengambilan_laba']);
 
@@ -320,9 +320,9 @@ class Simple_Order_Activity {
 	public function pembelian() {
 		global $wpdb;
 
-		$balance = Simple_Order::get_balance_transfer();
+		$balance = SO::get_balance_transfer();
 
-		$store = Simple_Order::get($wpdb->_STORES, 'id', $_POST['pembelian_toko']);
+		$store = SO::get($wpdb->_STORES, 'id', $_POST['pembelian_toko']);
 
 		if ($store) {
 			$purchase_data = [
@@ -356,7 +356,7 @@ class Simple_Order_Activity {
 					$wpdb->insert($wpdb->_PURCHASE_DETAILS, $purchase_details_data);
 
 					// update stock pending in
-					Simple_Order::update_stock($_POST['data']['product_id'][$i], 'pending_in', $qty, 'increase');
+					SO::update_stock($_POST['data']['product_id'][$i], 'pending_in', $qty, 'increase');
 				}
 
 				$i++;
@@ -386,9 +386,9 @@ class Simple_Order_Activity {
 
 	public function penjualan() {
 		global $wpdb;
-		$balance = Simple_Order::get_balance_transfer();
+		$balance = SO::get_balance_transfer();
 
-		$store = Simple_Order::get($wpdb->_STORES, 'id', $_POST['penjualan_toko']);
+		$store = SO::get($wpdb->_STORES, 'id', $_POST['penjualan_toko']);
 
 		if ($store) {
 			$purchase_data = [
@@ -427,8 +427,8 @@ class Simple_Order_Activity {
 					$wpdb->insert($wpdb->_PURCHASE_DETAILS, $purchase_details_data);
 
 					// update stock pending out and available
-					Simple_Order::update_stock($_POST['data']['product_id'][$i], 'pending_out', $qty, 'increase');
-					Simple_Order::update_stock($_POST['data']['product_id'][$i], 'available', $qty, 'decrease');
+					SO::update_stock($_POST['data']['product_id'][$i], 'pending_out', $qty, 'increase');
+					SO::update_stock($_POST['data']['product_id'][$i], 'available', $qty, 'decrease');
 				}
 
 				$i++;
@@ -450,10 +450,10 @@ class Simple_Order_Activity {
 		global $wpdb;
 
 		if ($_POST['sumber'] == 'cash') {
-			$balance = Simple_Order::get_balance_cash();
+			$balance = SO::get_balance_cash();
 			$method = 'cash';
 		} else {
-			$balance = Simple_Order::get_balance_transfer();
+			$balance = SO::get_balance_transfer();
 			$method = 'transfer';
 		}
 
@@ -471,7 +471,7 @@ class Simple_Order_Activity {
 	public function pindah_saldo_tunai() {
 		global $wpdb;
 
-		$balance = Simple_Order::get_balance_cash();
+		$balance = SO::get_balance_cash();
 		$amount = intval($_POST['nominal']);
 
 		if ($amount > $balance) {
@@ -488,7 +488,7 @@ class Simple_Order_Activity {
 			'method' => 'cash'
 		]);
 
-		$balance = Simple_Order::get_balance_transfer();
+		$balance = SO::get_balance_transfer();
 		$balance += $amount;
 
 		$wpdb->insert($wpdb->_FINANCE, [
@@ -505,7 +505,7 @@ class Simple_Order_Activity {
 
 		$courier_id = intval($_POST['kurir']);
 
-		$courier = Simple_Order::get($wpdb->_COURIERS, 'id', $courier_id);
+		$courier = SO::get($wpdb->_COURIERS, 'id', $courier_id);
 		if (!$courier) {
 			return;
 		}
@@ -514,7 +514,7 @@ class Simple_Order_Activity {
 		$date = date("Y-m-d", $date);
 
 		foreach ($_POST['purchase_id'] as $id) {
-			$purchase = Simple_Order::get($wpdb->_PURCHASES, 'id', $id);
+			$purchase = SO::get($wpdb->_PURCHASES, 'id', $id);
 
 			if ($purchase) {
 				// update

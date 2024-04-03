@@ -21,7 +21,7 @@ class Simple_Order_Products {
 	public function page() {
 		?>
 		<h1>Produk</h1>
-		<h2>Total nilai stok: <?php echo Simple_Order::currency(Simple_Order::get_stock_value()); ?></h2>
+		<h2>Total nilai stok: <?php echo SO::currency(SO::get_stock_value()); ?></h2>
 		<div id="hot-products" style="width:100%"></div>
 		<button class="button button-primary button-add" style="margin-top:10px">Tambah</button>
 		<?php
@@ -49,8 +49,8 @@ class Simple_Order_Products {
 					'id' => $_POST['id']
 				]);
 
-				Simple_Order::add_log('products');
-				Simple_Order::update_stock_value($_POST['id']);
+				SO::add_log('products');
+				SO::update_stock_value($_POST['id']);
 
 				unset($response['headers']);
 			}

@@ -30,7 +30,7 @@ class Simple_Order_Sell {
 				return;
 			}
 
-			$remaining = Simple_Order::get_remaining_payment($purchase_id);
+			$remaining = SO::get_remaining_payment($purchase_id);
 
 			if (!$remaining) {
 				$remaining = $purchase->total;
@@ -51,16 +51,16 @@ class Simple_Order_Sell {
 				$payment_method = sanitize_text_field($_POST['payment_method']);
 
 				if ($payment_method == 'transfer') {
-					$balance = Simple_Order::get_balance_transfer();
+					$balance = SO::get_balance_transfer();
 				} else {
-					$balance = Simple_Order::get_balance_cash();
+					$balance = SO::get_balance_cash();
 				}
 
-				$store = Simple_Order::get($wpdb->_STORES, 'id', $purchase->store_id);
+				$store = SO::get($wpdb->_STORES, 'id', $purchase->store_id);
 				$description = 'Pembayaran order: #' . $purchase_id . ' (toko: ' . $store->store_name .')';
 
 				$payment_status = 'partial';
-				$count = Simple_Order::get_payment_count($purchase_id);
+				$count = SO::get_payment_count($purchase_id);
 
 				if ($amount >= $remaining) {
 					$amount = $remaining;
@@ -151,7 +151,7 @@ class Simple_Order_Sell {
 		} else {
 		?>
 		<h1>Penjualan</h1>
-		<h2>Total penagihan: <?php echo Simple_Order::currency(Simple_Order::get_total_remaining()); ?></h2>
+		<h2>Total penagihan: <?php echo SO::currency(SO::get_total_remaining()); ?></h2>
 		<div id="hot-sell"></div>
 		<p>Catatan:</p>
 		<ol>
@@ -187,12 +187,12 @@ class Simple_Order_Sell {
 			]);
 
 			if ($result) {
-				$purchase_details = Simple_Order::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $purchase->id);
+				$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $purchase->id);
 
 				foreach ($purchase_details as $d) {
-					Simple_Order::update_stock($d->product_id, 'available', $d->qty, 'increase');
-					Simple_Order::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
-					Simple_Order::update_stock_value($d->product_id);
+					SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
+					SO::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
+					SO::update_stock_value($d->product_id);
 				}
 			}
 		}
@@ -209,7 +209,7 @@ class Simple_Order_Sell {
 			if ($results[$i]->payment_status == 'complete') {
 				$results[$i]->remaining = null;
 			} else {
-				$results[$i]->remaining = Simple_Order::get_remaining_payment($results[$i]->id);
+				$results[$i]->remaining = SO::get_remaining_payment($results[$i]->id);
 
 				if (!$results[$i]->remaining) {
 					$results[$i]->remaining = $results[$i]->total;

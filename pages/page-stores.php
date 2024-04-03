@@ -63,7 +63,7 @@ class Simple_Order_Stores {
 					'id' => $_POST['id']
 				]);
 
-				Simple_Order::add_log('stores');
+				SO::add_log('stores');
 
 				unset($response['headers']);
 			}

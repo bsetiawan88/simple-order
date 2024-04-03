@@ -48,7 +48,7 @@ class Simple_Order_Couriers {
 					'id' => $_POST['id']
 				]);
 
-				Simple_Order::add_log('couriers');
+				SO::add_log('couriers');
 
 				unset($response['headers']);
 			}

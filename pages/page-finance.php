@@ -30,7 +30,7 @@ class Simple_Order_Finance {
 	public function page_transfer() {
 		?>
 		<h1>Laporan Transfer</h1>
-		<h2>Saldo: <?php echo Simple_Order::currency(Simple_Order::get_balance_transfer()); ?></h2>
+		<h2>Saldo: <?php echo SO::currency(SO::get_balance_transfer()); ?></h2>
 		<div id="hot-transfers"></div>
 		<hr>
 		
@@ -40,7 +40,7 @@ class Simple_Order_Finance {
 	public function page_cash() {
 		?>
 		<h1>Laporan Tunai</h1>
-		<h2>Saldo: <?php echo Simple_Order::currency(Simple_Order::get_balance_cash()); ?></h2>
+		<h2>Saldo: <?php echo SO::currency(SO::get_balance_cash()); ?></h2>
 		<div id="hot-cash"></div>
 		<p>Catatan:</p>
 		<ol>

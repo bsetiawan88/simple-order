@@ -30,7 +30,7 @@ class Simple_Order_Buy {
 		if (isset($_GET['id'])) {
 			if (isset($_POST['invoice'])) {
 				$purchase_id = sanitize_text_field($_GET['id']);
-				$purchase = Simple_Order::get($wpdb->_PURCHASES, 'id', $purchase_id);
+				$purchase = SO::get($wpdb->_PURCHASES, 'id', $purchase_id);
 
 				if (!$purchase) {
 					return;
@@ -118,12 +118,12 @@ class Simple_Order_Buy {
 			]);
 
 			if ($result) {
-				$purchase_details = Simple_Order::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
+				$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
 
 				foreach ($purchase_details as $d) {
-					Simple_Order::update_stock($d->product_id, 'available', $d->qty, 'increase');
-					Simple_Order::update_stock($d->product_id, 'pending_in', $d->qty, 'decrease');
-					Simple_Order::update_stock_value($d->product_id);
+					SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
+					SO::update_stock($d->product_id, 'pending_in', $d->qty, 'decrease');
+					SO::update_stock_value($d->product_id);
 				}
 			}
 		}
