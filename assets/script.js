@@ -77,7 +77,7 @@ jQuery(function($) {
 			setTimeout(function() {
 				hot.updateSettings({
 					columns: response.data.columns,
-					width: 1000
+					colWidths: [20]
 				});
 			}, 300);
 		});
