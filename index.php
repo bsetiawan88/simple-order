@@ -64,6 +64,9 @@ class Simple_Order {
 		.ht_master tr:nth-of-type(even) > td {
 			background-color: #e6ffe6;
 		}
+		.ht_master tr:nth-of-type(even):nth-child(4n+2) > td {
+			background-color: #d1ecf1;
+		}
 		</style>';
 		wp_enqueue_style('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.css');
 		wp_enqueue_script('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.js');
