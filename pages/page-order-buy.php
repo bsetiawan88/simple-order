@@ -87,7 +87,7 @@ class Simple_Order_Buy {
 		<p>Catatan:</p>
 		<ol>
 			<li>
-			Halaman ini digunakan untuk menampilkan pembelian yang <strong>belum diterima</strong>.
+			Halaman ini digunakan untuk menampilkan pembelian yang <strong>belum diterima</strong> atau <strong>belum upload nota</strong>.
 			</li>
 			<li>
 			Pembelian wajib upload nota.
@@ -111,19 +111,24 @@ class Simple_Order_Buy {
 			unset($response['headers']);
 
 			$id = $_POST['id'];
-			$result = $wpdb->update($wpdb->_PURCHASES, [
-				'delivery_status' => 'complete'
-			], [
-				'id' => $id
-			]);
 
-			if ($result) {
-				$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
+			$purchase =$wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->_PURCHASES} WHERE id = %d AND delivery_status != %s", $id, 'complete'));
 
-				foreach ($purchase_details as $d) {
-					SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
-					SO::update_stock($d->product_id, 'pending_in', $d->qty, 'decrease');
-					SO::update_stock_value($d->product_id);
+			if ($purchase) {
+				$result = $wpdb->update($wpdb->_PURCHASES, [
+					'delivery_status' => 'complete'
+				], [
+					'id' => $id
+				]);
+	
+				if ($result) {
+					$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
+	
+					foreach ($purchase_details as $d) {
+						SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
+						SO::update_stock($d->product_id, 'pending_in', $d->qty, 'decrease');
+						SO::update_stock_value($d->product_id);
+					}
 				}
 			}
 		}
@@ -133,7 +138,7 @@ class Simple_Order_Buy {
 		if (isset($_POST['id'])) {
 			$query .= $wpdb->prepare("P.id = %d", $_POST['id']);
 		} else {
-			$query .= $wpdb->prepare("P.delivery_status = %s", 'pending');
+			$query .= $wpdb->prepare("(P.delivery_status = %s OR F.invoice IS NULL)", 'pending');
 		}
 
 		$results = $wpdb->get_results($query);
