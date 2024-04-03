@@ -8,7 +8,7 @@ Author: Bagus Pribadi Setiawan
 class Simple_Order {
 
 	public function __construct() {
-		define('INTIAL_VALUE', 100);
+		define('INTIAL_VALUE', 19887850);
 
 		register_activation_hook(__FILE__, [$this, 'plugin_activate']);
 		add_action('init', [$this, 'init']);
@@ -135,7 +135,7 @@ class Simple_Order {
 
 	public static function get_profit() {
 		global $wpdb;
-		$capital_value = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE description = 'Penambahan modal'");
+		$capital_value = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE description = 'Penambahan modal'") + INTIAL_VALUE;
 		$current_balance = self::get_balance_transfer() + self::get_balance_cash() + self::get_stock_value();
 
 		return $current_balance - $capital_value;
