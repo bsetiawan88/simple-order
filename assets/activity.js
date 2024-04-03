@@ -14,6 +14,24 @@ jQuery(function($) {
 		
 	});
 
+	$('.search').on('keyup', function() {
+		var search_text = $(this).val().toLowerCase();
+		var parent_element = $(this).data('parent');
+		
+		$('.' + parent_element + ' .table tr').each(function() {
+			if ($(this).hasClass('tr-produk') == false && $(this).hasClass('tr-option') == false) {
+			
+			} else {
+				var item_name = $(this).data('name').toLowerCase();
+				if (item_name.includes(search_text)) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			}
+		});
+	});
+
 	$('.select-all').on('click', function() {
 		$('.purchase-id-checkbox').prop('checked', true);
 	});

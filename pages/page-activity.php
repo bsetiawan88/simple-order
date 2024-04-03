@@ -137,6 +137,10 @@ class Simple_Order_Activity {
 						<?php echo $store_options_buy; ?>
 						</select>
 					</div>
+					<div class="form-group">
+						<label for="search">Cari produk:</label>
+						<input type="text" class="form-control search" data-parent="produk-table-beli" />
+					</div>
 					<div class="produk-table-beli">
 						<?php echo $this->create_table($products_options, 'beli'); ?>
 					</div>
@@ -154,6 +158,10 @@ class Simple_Order_Activity {
 						<select name="penjualan_toko" class="form-control nama-toko" required>
 						<?php echo $store_options_sell; ?>
 						</select>
+					</div>
+					<div class="form-group">
+						<label for="search">Cari produk:</label>
+						<input type="text" class="form-control search" data-parent="produk-table-jual" />
 					</div>
 					<div class="produk-table-jual">
 						<?php echo $this->create_table($products_options, 'jual'); ?>
@@ -236,11 +244,11 @@ class Simple_Order_Activity {
 		foreach ($data_array as $row_data) {
 			$row = '';
 
-			$row .= '<tr class="tr-produk">';
+			$row .= '<tr class="tr-produk" data-name="' . $row_data->product_name . '">';
 			$row .= '<td colspan="4"><input type="hidden" class="form-control" name="data[product_id][]" value="' . $row_data->id . '">' . $row_data->product_name . ' (stok: '. $row_data->stock_available . ')</td>';
 			$row .= '</tr>';
 
-			$row .= '<tr class="tr-option">';
+			$row .= '<tr class="tr-option" data-name="' . $row_data->product_name . '">';
 			if ($mode == 'beli') {
 				$row .= '<td><input type="number" name="data[price_buy][]" class="form-control text-right harga-beli" value="' . $row_data->price_buy . '"></td>';
 			} else {
