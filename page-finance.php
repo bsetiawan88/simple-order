@@ -10,20 +10,35 @@ class Simple_Order_Finance {
 	public function menu() {
 		add_submenu_page(
 			'simple-order',
-			'Laporan',
-			'Laporan',
+			'Laporan Transfer',
+			'Laporan Transfer',
 			'read',
-			'simple-order-finance',
-			[$this, 'page']
+			'simple-order-finance-transfer',
+			[$this, 'page_transfer']
+		);
+
+		add_submenu_page(
+			'simple-order',
+			'Laporan Tunai',
+			'Laporan Tunai',
+			'read',
+			'simple-order-finance-cash',
+			[$this, 'page_cash']
 		);
 	}
 
-	public function page() {
+	public function page_transfer() {
 		?>
 		<h1>Laporan Transfer</h1>
 		<h2>Saldo: <?php echo Simple_Order::currency(Simple_Order::get_balance_transfer()); ?></h2>
 		<div id="hot-transfers"></div>
 		<hr>
+		
+		<?php
+	}
+
+	public function page_cash() {
+		?>
 		<h1>Laporan Tunai</h1>
 		<h2>Saldo: <?php echo Simple_Order::currency(Simple_Order::get_balance_cash()); ?></h2>
 		<div id="hot-cash"></div>
