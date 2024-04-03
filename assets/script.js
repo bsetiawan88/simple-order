@@ -76,7 +76,8 @@ jQuery(function($) {
 
 			setTimeout(function() {
 				hot.updateSettings({
-					columns: response.data.columns
+					columns: response.data.columns,
+					width: 1000
 				});
 			}, 300);
 		});
@@ -156,7 +157,6 @@ jQuery(function($) {
 				var url = simple_order.home_url + '/wp-content' + invoice_url;
 				td.innerHTML = '<a href="' + url + '" target="_blank"><img width="200px" src="' + url + '"></a>';
 			}
-			
 		}
 
 		if (prop == 'amount' || prop == 'balance') {
