@@ -156,7 +156,7 @@ class Simple_Order_Buy {
 				];
 			}
 
-			$response['collapsed'] = true;
+			$response['expanded'] = true;
 		}
 
 		$response['table'] = $results;
