@@ -66,12 +66,12 @@ jQuery(function($) {
 			if (typeof response.data.table != 'undefined') {
 				hot.loadData(response.data.table);
 
-				if (typeof response.data.expanded != 'undefined' || response.data.expanded == false) {
-					setTimeout(function() {
-						nestedRowsPlugin = hot.getPlugin('nestedRows');
-						nestedRowsPlugin.collapsingUI.collapseAll();
-					}, 500);
-				}
+				// if (typeof data.id == 'undefined') {
+				// 	setTimeout(function() {
+				// 		nestedRowsPlugin = hot.getPlugin('nestedRows');
+				// 		nestedRowsPlugin.collapsingUI.collapseAll();
+				// 	}, 500);
+				// }
 			}
 
 			setTimeout(function() {
