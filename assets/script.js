@@ -176,6 +176,14 @@ jQuery(function($) {
 	function renderer_buy(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
+		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
+			create_border = true;
+		}
+
+		if (create_border) {
+			td.style.borderTop = '1px solid orange';
+		}
+
 		if ((prop == 'price' || prop == 'pay_amount') && td.textContent != '') {
 			td.style.textAlign = 'right';
 			td.textContent = currency(td.textContent);
@@ -195,6 +203,8 @@ jQuery(function($) {
 				td.innerHTML += '<button onclick="updater({method: \'complete\', id: ' + id + '})">Selesai</button> ';
 				td.innerHTML += '<button onclick="window.location.href=\'' + url + '\'">Upload Nota</button>';
 			}
+
+			create_border = false;
 		}
 	}
 
