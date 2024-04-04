@@ -66,7 +66,7 @@ jQuery(function($) {
 			if (typeof response.data.table != 'undefined') {
 				hot.loadData(response.data.table);
 
-				if (typeof data.id == 'undefined') {
+				if (typeof data.id == 'undefined' || typeof response.data.collapsed != 'undefined') {
 					setTimeout(function() {
 						nestedRowsPlugin = hot.getPlugin('nestedRows');
 						nestedRowsPlugin.collapsingUI.collapseAll();
