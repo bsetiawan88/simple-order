@@ -130,6 +130,6 @@ class SO {
 			$data['balance'] = $balance - intval($data['amount']);
 		}
 
-		$wpdb->insert($wpdb->_FINANCE, $data);
+		return $wpdb->insert($wpdb->_FINANCE, $data);
 	}
 }

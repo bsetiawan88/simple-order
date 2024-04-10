@@ -88,7 +88,7 @@ class Simple_Order_Sell {
 					'note' => $note
 				];
 
-				SO::insert_finance($data);
+				$result = SO::insert_finance($data);
 
 				if ($result) {
 					// update purchase
