@@ -59,7 +59,6 @@ class Simple_Order_delivery {
 
 				foreach ($purchase_details as $d) {
 					SO::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
-					SO::update_stock_value($d->product_id);
 				}
 			}
 		}

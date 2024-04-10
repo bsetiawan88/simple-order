@@ -199,9 +199,7 @@ jQuery(function($) {
 
 			if (id) {
 				var url = simple_order.admin_url + 'admin.php?page=simple-order-buy&id=' + id;
-
-				td.innerHTML += '<button onclick="updater({method: \'complete\', id: ' + id + '})">Selesai</button> ';
-				td.innerHTML += '<button onclick="window.location.href=\'' + url + '\'">Upload Nota</button>';
+				td.innerHTML += '<button onclick="window.location.href=\'' + url + '\'">Selesai</button>';
 			}
 
 			create_border = false;

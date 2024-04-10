@@ -69,7 +69,7 @@ class SO {
 
 	public static function get_stock_value() {
 		global $wpdb;
-		return $wpdb->get_var("SELECT SUM(stock_value) FROM {$wpdb->_PRODUCTS}");
+		return $wpdb->get_var("SELECT SUM(stock_available * price_buy) FROM {$wpdb->_PRODUCTS}");
 	}
 
 	public static function get_profit() {
@@ -114,18 +114,22 @@ class SO {
 		}
 	}
 
-	public static function update_stock_value($product_id) {
+	public static function insert_finance($data) {
 		global $wpdb;
 
-		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}zzz_products WHERE id = %d", $product_id));
-		$stock_value = $row->price_buy * $row->stock_available;
+		if (isset($data['method']) && $data['method'] == 'cash') {
+			$balance = self::get_balance_cash();
+		} else {
+			$balance = self::get_balance_transfer();
+			$data['method'] = 'transfer';
+		}
 
-		$wpdb->update($wpdb->prefix . 'zzz_products', 
-		[
-			'stock_value' => $stock_value
-		], [
-			'id' => $product_id
-		]);
+		if ($data['type'] == 'in') {
+			$data['balance'] = $balance + intval($data['amount']);
+		} else {
+			$data['balance'] = $balance - intval($data['amount']);
+		}
+
+		$wpdb->insert($wpdb->_FINANCE, $data);
 	}
-
 }

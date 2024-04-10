@@ -85,11 +85,10 @@ class Simple_Order_Sell {
 					'purchase_id' => $purchase_id,
 					'description' => $description,
 					'amount' => $amount,
-					'balance' => $balance,
 					'note' => $note
 				];
 
-				$result = $wpdb->insert($wpdb->_FINANCE, $data);
+				SO::insert_finance($data);
 
 				if ($result) {
 					// update purchase
@@ -122,8 +121,8 @@ class Simple_Order_Sell {
 						<div class="form-group">
 							<label for="payment_method">Metode pembayaran</label>
 							<select id="payment_method" name="payment_method" class="form-control">
-								<option value="cash">Tunai</option>
 								<option selected value="transfer">Transfer</option>
+								<option value="cash">Tunai</option>
 							</select>
 						</div>
 
@@ -192,7 +191,6 @@ class Simple_Order_Sell {
 				foreach ($purchase_details as $d) {
 					SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
 					SO::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
-					SO::update_stock_value($d->product_id);
 				}
 			}
 		}

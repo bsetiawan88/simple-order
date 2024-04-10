@@ -50,7 +50,6 @@ class Simple_Order_Products {
 				]);
 
 				SO::add_log('products');
-				SO::update_stock_value($_POST['id']);
 
 				unset($response['headers']);
 			}
@@ -63,6 +62,7 @@ class Simple_Order_Products {
 
 		for ($i = 0; $i < count($results); $i++) {
 			$results[$i]->est = $results[$i]->price_sell - $results[$i]->price_buy;
+			$results[$i]->stock_value = $results[$i]->stock_available * $results[$i]->price_buy;
 		}
 
 		$response['table'] = $results;

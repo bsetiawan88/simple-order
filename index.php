@@ -131,8 +131,7 @@ class Simple_Order {
 				price_sell INT,
 				stock_available INT,
 				stock_pending_in INT,
-				stock_pending_out INT,
-				stock_value INT
+				stock_pending_out INT
 			)",
 			"CREATE TABLE IF NOT EXISTS {$wpdb->_STORES} (
 				id INT AUTO_INCREMENT PRIMARY KEY,

@@ -296,40 +296,28 @@ class Simple_Order_Activity {
 	}
 	
 	public function penambahan_modal() {
-		global $wpdb;
-
-		$balance = SO::get_balance_transfer();
-
-		$balance += intval($_POST['penambahan_modal']);
-
-		$wpdb->insert($wpdb->_FINANCE, [
+		$data = [
 			'type' => 'in',
 			'description' => 'Penambahan modal',
-			'amount' => intval($_POST['penambahan_modal']),
-			'balance' => $balance
-		]);
+			'amount' => $_POST['penambahan_modal'],
+		];
+
+		SO::insert_finance($data);
 	}
 
 	public function pengambilan_laba() {
-		global $wpdb;
-
-		$balance = SO::get_balance_transfer();
-
-		$balance -= intval($_POST['pengambilan_laba']);
-
-		$wpdb->insert($wpdb->_FINANCE, [
+		$data = [
 			'type' => 'out',
 			'description' => 'Pengambilan laba',
-			'amount' => intval($_POST['pengambilan_laba']),
-			'balance' => $balance
-		]);
+			'amount' => $_POST['pengambilan_laba']
+		];
+
+		SO::insert_finance($data);
 	}
 
 	public function pembelian() {
 		global $wpdb;
-
-		$balance = SO::get_balance_transfer();
-
+		
 		$store = SO::get($wpdb->_STORES, 'id', $_POST['pembelian_toko']);
 
 		if ($store) {
@@ -380,15 +368,14 @@ class Simple_Order_Activity {
 				'id' => $purchase_id
 			]);
 
-			$balance -= $pay_amount;
-
-			$wpdb->insert($wpdb->_FINANCE, [
+			$data = [
 				'type' => 'out',
 				'purchase_id' => $purchase_id,
 				'description' => 'Pembelian toko: ' . $store->store_name,
-				'amount' => $total,
-				'balance' => $balance
-			]);
+				'amount' => $pay_amount,
+			];
+
+			SO::insert_finance($data);
 		}
 	}
 
@@ -455,30 +442,23 @@ class Simple_Order_Activity {
 	}
 
 	public function pengeluaran() {
-		global $wpdb;
-
 		if ($_POST['sumber'] == 'cash') {
-			$balance = SO::get_balance_cash();
 			$method = 'cash';
 		} else {
-			$balance = SO::get_balance_transfer();
 			$method = 'transfer';
 		}
 
-		$balance -= intval($_POST['nominal']);
-
-		$wpdb->insert($wpdb->_FINANCE, [
+		$data = [
 			'type' => 'out',
 			'description' => 'Pengeluaran: ' . sanitize_text_field($_POST['keterangan']),
-			'amount' => intval($_POST['nominal']),
-			'balance' => $balance,
+			'amount' => $_POST['nominal'],
 			'method' => $method
-		]);
+		];
+
+		SO::insert_finance($data);
 	}
 
 	public function pindah_saldo_tunai() {
-		global $wpdb;
-
 		$balance = SO::get_balance_cash();
 		$amount = intval($_POST['nominal']);
 
@@ -486,26 +466,23 @@ class Simple_Order_Activity {
 			$amount = $balance;
 		}
 
-		$balance -= $amount;
-
-		$wpdb->insert($wpdb->_FINANCE, [
+		$data = [
 			'type' => 'out',
 			'description' => 'Pindah saldo tunai',
 			'amount' => $amount,
-			'balance' => $balance,
 			'method' => 'cash'
-		]);
+		];
 
-		$balance = SO::get_balance_transfer();
-		$balance += $amount;
+		SO::insert_finance($data);
 
-		$wpdb->insert($wpdb->_FINANCE, [
+		$data = [
 			'type' => 'in',
 			'description' => 'Pindah saldo tunai',
 			'amount' => $amount,
-			'balance' => $balance,
 			'method' => 'transfer'
-		]);
+		];
+
+		SO::insert_finance($data);
 	}
 
 	public function pengiriman() {

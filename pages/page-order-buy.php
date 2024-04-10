@@ -28,58 +28,7 @@ class Simple_Order_Buy {
 		global $wpdb;
 
 		if (isset($_GET['id'])) {
-			if (isset($_POST['invoice'])) {
-				$purchase_id = sanitize_text_field($_GET['id']);
-				$purchase = SO::get($wpdb->_PURCHASES, 'id', $purchase_id);
-
-				if (!$purchase) {
-					return;
-				}
-				
-				$data = $_POST['invoice'];
-
-				// Remove the data prefix
-				$data = str_replace('data:image/jpeg;base64,', '', $data);
-				$data = str_replace(' ', '+', $data);
-
-				// Decode the base64 data
-				$decoded = base64_decode($data);
-				
-				// Save the decoded data to a file (e.g., image.jpg)
-				$relative_path = '/order/invoices/' . date('Y') . '/' . date('m') . '/';
-				$path = WP_CONTENT_DIR . $relative_path;
-				@mkdir($path, 0755, true);
-				$filename = $purchase_id . '.jpg';
-				file_put_contents($path . $filename, $decoded);
-
-				$wpdb->update($wpdb->_FINANCE, ['invoice' => $relative_path . $filename], ['purchase_id' => $purchase_id])
-				?>
-				<div class="container mt-5">
-					<h1>Data sudah disimpan</h1>
-					<script>
-						setTimeout(function() {
-							window.location.href = '<?php echo admin_url('admin.php?page=simple-order-buy'); ?>';
-						}, 1000);
-					</script>
-				</div>
-				<?php
-			} else {
-				?>
-				<div class="container mt-5">
-				<h1>Upload nota</h1>
-				<div id="hot-buy"></div>
-				<form method="POST" style="margin-top:50px">
-					<input type="hidden" id="invoice" name="invoice" />
-					<img id="preview" />
-					<div class="form-group">
-						<label for="file">Nota</label>
-						<input type="file" id="file" accept="image/jpeg" />
-					</div>
-					<input class="btn btn-primary" type="submit" value="Kirim"/>
-				</form>
-				</div>
-				<?php
-			}
+			$this->complete();
 		} else {
 		?>
 		<h1>Pembelian</h1>
@@ -107,39 +56,16 @@ class Simple_Order_Buy {
 			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga beli', 'Jumlah', 'Nominal', ''],
 		];
 
-		if (isset($_POST['method']) && $_POST['method'] == 'complete') {
-			unset($response['headers']);
 
-			$id = $_POST['id'];
-
-			$purchase =$wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->_PURCHASES} WHERE id = %d AND delivery_status != %s", $id, 'complete'));
-
-			if ($purchase) {
-				$result = $wpdb->update($wpdb->_PURCHASES, [
-					'delivery_status' => 'complete'
-				], [
-					'id' => $id
-				]);
-	
-				if ($result) {
-					$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $id);
-	
-					foreach ($purchase_details as $d) {
-						SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
-						SO::update_stock($d->product_id, 'pending_in', $d->qty, 'decrease');
-						SO::update_stock_value($d->product_id);
-					}
-				}
-			}
-		}
-
-		$query = "SELECT P.*, S.store_name, F.date FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id LEFT JOIN {$wpdb->_FINANCE} F ON F.purchase_id = P.id WHERE P.type = 'buy' AND ";
+		$query = "SELECT P.*, S.store_name, F.date FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id LEFT JOIN {$wpdb->_FINANCE} F ON F.purchase_id = P.id WHERE P.type = 'buy' AND F.type = 'out' ";
 
 		if (isset($_POST['id'])) {
 			$query .= $wpdb->prepare("P.id = %d", $_POST['id']);
 		} else {
 			$query .= $wpdb->prepare("(P.delivery_status = %s OR F.invoice IS NULL)", 'pending');
 		}
+
+		$query .= ' GROUP BY P.id';
 
 		$results = $wpdb->get_results($query);
 
@@ -176,6 +102,135 @@ class Simple_Order_Buy {
 		}
 
 		wp_send_json_success($response);
+	}
+
+	public function complete() {
+		global $wpdb;
+
+		$purchase_id = sanitize_text_field($_GET['id']);
+		$purchase = SO::get($wpdb->_PURCHASES, 'id', $purchase_id);
+
+		if (!$purchase) {
+			return;
+		}
+
+		$purchase_details = $wpdb->get_results($wpdb->prepare("SELECT D.*, P.product_name FROM {$wpdb->_PURCHASE_DETAILS} D LEFT JOIN {$wpdb->_PRODUCTS} P ON D.product_id = P.id WHERE D.purchase_id = %d", $purchase_id));
+
+		if (!empty($_POST)) {
+			if (!empty($_POST['invoice'])) {
+				$data = $_POST['invoice'];
+
+				// Remove the data prefix
+				$data = str_replace('data:image/jpeg;base64,', '', $data);
+				$data = str_replace(' ', '+', $data);
+	
+				// Decode the base64 data
+				$decoded = base64_decode($data);
+				
+				// Save the decoded data to a file (e.g., image.jpg)
+				$relative_path = '/order/invoices/' . date('Y') . '/' . date('m') . '/';
+				$path = WP_CONTENT_DIR . $relative_path;
+				@mkdir($path, 0755, true);
+				$filename = $purchase_id . '.jpg';
+				file_put_contents($path . $filename, $decoded);
+	
+				$wpdb->update($wpdb->_FINANCE, ['invoice' => $relative_path . $filename], ['purchase_id' => $purchase_id, 'type' => 'out']);
+			} else {
+				$result = $wpdb->update($wpdb->_PURCHASES, [
+					'delivery_status' => 'complete'
+				], [
+					'id' => $purchase_id
+				]);
+	
+				if ($result) {
+					foreach ($purchase_details as $d) {
+						SO::update_stock($d->product_id, 'available', $_POST['product'][$d->product_id], 'increase');
+						SO::update_stock($d->product_id, 'pending_in', $d->qty, 'decrease');
+					}
+
+					if (!empty($_POST['refund'])) {
+						$data = [
+							'type' => 'in',
+							'purchase_id' => $purchase_id,
+							'description' => 'Refund pembelian: ' . $purchase_id,
+							'method' => 'transfer',
+							'amount' => $_POST['refund'],
+						];
+
+						SO::insert_finance($data);
+					}
+				}
+			}
+			
+			?>
+			<div class="container mt-5">
+				<h1>Data sudah disimpan</h1>
+				<script>
+					setTimeout(function() {
+						window.location.href = '<?php echo admin_url('admin.php?page=simple-order-buy'); ?>';
+					}, 1000);
+				</script>
+			</div>
+			<?php
+		} else {
+			?>
+			<div class="container mt-5">
+			<h1>Pembelian</h1>
+			<div id="hot-buy"></div>
+			<hr>
+
+			<h2 style="margin-top:50px;">Upload nota</h2>
+			<form method="POST" style="margin-top:50px">
+				<input type="hidden" id="invoice" name="invoice" />
+
+				<?php
+				$src = '';
+
+				$query = $wpdb->prepare("SELECT invoice FROM {$wpdb->_FINANCE} WHERE purchase_id = %d AND invoice IS NOT NULL", $purchase_id);
+
+				$invoice = $wpdb->get_var($query);
+
+				if (!empty($invoice)) {
+					$src = ' src="' . home_url() . '/wp-content/' . $invoice . '"';
+				}
+				?>
+				<img id="preview" <?php echo $src; ?> />
+				<div class="form-group">
+					<label for="file">Nota</label>
+					<input type="file" id="file" accept="image/jpeg" />
+				</div>
+				<input class="btn btn-primary" type="submit" value="Kirim"/>
+			</form>
+			<hr>
+
+			<?php
+			if ($purchase->delivery_status != 'complete') {
+			?>
+				<h2 style="margin-top:50px;">Konfirmasi penerimaan</h2>
+				<form method="POST" style="margin-top:50px">
+					<?php
+		
+					foreach ($purchase_details as $d) {
+						?>
+						<div class="form-group">
+							<label for="product-<?php echo $d->id; ?>"><?php echo $d->product_name; ?></label>
+							<input class="form-control" style="width:200px;" min="0" max="<?php echo $d->qty; ?>" type="number" id="product-<?php echo $d->id; ?>" name="product[<?php echo $d->product_id; ?>]" value="<?php echo $d->qty;?>" />
+						</div>
+						<?php
+					}
+					?>
+
+					<div class="form-group">
+						<label for="refund">Jumlah refund</label>
+						<input class="form-control" style="width:200px;" min="0" max="<?php echo $purchase->pay_amount; ?>" type="number" id="refund" name="refund" value="0" />
+					</div>
+					
+					<input class="btn btn-primary" type="submit" value="Kirim"/>
+				</form>
+			<?php } ?>
+			</div>
+			<?php
+		}
 	}
 	
 }
