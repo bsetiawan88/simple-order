@@ -56,7 +56,6 @@ class Simple_Order_Buy {
 			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga beli', 'Jumlah', 'Nominal', ''],
 		];
 
-
 		$query = "SELECT P.*, S.store_name, F.date FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id LEFT JOIN {$wpdb->_FINANCE} F ON F.purchase_id = P.id WHERE P.type = 'buy' AND F.type = 'out' AND ";
 
 		if (isset($_POST['id'])) {
