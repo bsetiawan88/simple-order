@@ -57,7 +57,7 @@ class Simple_Order_Buy {
 		];
 
 
-		$query = "SELECT P.*, S.store_name, F.date FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id LEFT JOIN {$wpdb->_FINANCE} F ON F.purchase_id = P.id WHERE P.type = 'buy' AND F.type = 'out' ";
+		$query = "SELECT P.*, S.store_name, F.date FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id LEFT JOIN {$wpdb->_FINANCE} F ON F.purchase_id = P.id WHERE P.type = 'buy' AND F.type = 'out' AND ";
 
 		if (isset($_POST['id'])) {
 			$query .= $wpdb->prepare("P.id = %d", $_POST['id']);
