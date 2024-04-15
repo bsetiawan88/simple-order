@@ -67,6 +67,11 @@ class Simple_Order {
 		.ht_master tr:nth-of-type(even):nth-child(4n+2) > td {
 			background-color: #d1ecf1;
 		}
+		.filter-label {
+			border: 1px solid black;
+			padding: 7px 12px;
+			margin-right: 10px;
+		}
 		</style>';
 		wp_enqueue_style('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.css');
 		wp_enqueue_script('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.js');

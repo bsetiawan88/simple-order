@@ -1,5 +1,11 @@
 jQuery(function($) {
 
+	var empty_data = [
+		{
+			__children: []
+		}
+	];
+
 	if ($('.datepicker').length > 0) {
 		$('.datepicker').datepicker({
 			dateFormat: 'DD, d MM yy'
@@ -64,7 +70,12 @@ jQuery(function($) {
 			}
 
 			if (typeof response.data.table != 'undefined') {
-				hot.loadData(response.data.table);
+				if (response.data.table.length == 0) {
+					data = empty_data;
+				} else {
+					data = response.data.table;
+				}
+				hot.loadData(data);
 
 				// if (typeof data.id == 'undefined') {
 				// 	setTimeout(function() {
@@ -316,15 +327,9 @@ jQuery(function($) {
 	}
 	
 	function create_table(selector, headers) {
-		var sourceDataObject = [
-				{
-					__children: []
-				}
-			];
-
 		var container = document.querySelector(selector, headers);
 		hot = new Handsontable(container, {
-			data: sourceDataObject,
+			data: empty_data,
 			colHeaders: headers,
 			columnSorting: true,
 			preventOverflow: 'horizontal',
@@ -437,6 +442,10 @@ jQuery(function($) {
 
 	$('.button-add').click(function() {
 		updater({method: 'add'});
+	});
+
+	$('.filter-button').on('click', function() {
+		updater({data: $(this).data('action')});
 	});
 
 });

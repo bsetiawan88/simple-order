@@ -32,17 +32,25 @@ class Simple_Order_Buy {
 		} else {
 		?>
 		<h1>Pembelian</h1>
+
+		<br/>
+
+		<div>
+			<label for="filter1" class="filter-label"><input id="filter1" class="filter-button" data-action="pending" type="radio" name="opt" checked> Belum dikirim</label>
+			<label for="filter2" class="filter-label"><input id="filter2" class="filter-button" data-action="invoice" type="radio" name="opt"> Nota belum lengkap</label>
+			<label for="filter3" class="filter-label"><input id="filter3" class="filter-button" data-action="all" type="radio" name="opt"> Selesai</label>
+		</div>
+
+		<br/>
+
 		<div id="hot-buy"></div>
 		<p>Catatan:</p>
 		<ol>
 			<li>
-			Halaman ini digunakan untuk menampilkan pembelian yang <strong>belum diterima</strong> atau <strong>belum upload nota</strong>.
-			</li>
-			<li>
 			Pembelian wajib upload nota.
 			</li>
 			<li>
-			Klik tombol <code>Selesai</code> untuk update <strong>stok tersedia</strong>.
+			Klik tombol <code>Selesai</code> untuk upload nota dan update <strong>stok tersedia</strong>.
 			</li>
 		</ol>
 		<?php
@@ -60,6 +68,15 @@ class Simple_Order_Buy {
 
 		if (isset($_POST['id'])) {
 			$query .= $wpdb->prepare("P.id = %d", $_POST['id']);
+		} else if (isset($_POST['data'])) {
+			if ($_POST['data'] == 'pending') {
+				$query .= "P.delivery_status = 'pending'";
+			} else if ($_POST['data'] == 'invoice') {
+				$query .= "F.invoice IS NULL";
+			} else if ($_POST['data'] == 'complete') {
+				$query .= "(P.delivery_status = 'complete' AND F.invoice IS NOT NULL)";
+			}
+			unset($response['headers']);
 		} else {
 			$query .= $wpdb->prepare("(P.delivery_status = %s OR F.invoice IS NULL)", 'pending');
 		}
