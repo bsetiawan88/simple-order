@@ -74,7 +74,9 @@ class SO {
 
 	public static function get_stock_profit_value() {
 		global $wpdb;
-		return $wpdb->get_var("SELECT SUM(stock_available * price_sell) FROM {$wpdb->_PRODUCTS}");
+		$value = $wpdb->get_var("SELECT SUM(stock_available * price_sell) FROM {$wpdb->_PRODUCTS}");
+
+		return $value - self::get_stock_value();
 	}
 
 	public static function get_profit() {
