@@ -36,7 +36,7 @@ class Simple_Order_Buy {
 		<br/>
 
 		<div>
-			<label for="filter1" class="filter-label"><input id="filter1" class="filter-button" data-action="pending" type="radio" name="opt" checked> Belum dikirim</label>
+			<label for="filter1" class="filter-label"><input id="filter1" class="filter-button" data-action="pending" type="radio" name="opt" checked> Belum diterima</label>
 			<label for="filter2" class="filter-label"><input id="filter2" class="filter-button" data-action="invoice" type="radio" name="opt"> Nota belum lengkap</label>
 			<label for="filter3" class="filter-label"><input id="filter3" class="filter-button" data-action="complete" type="radio" name="opt"> Selesai</label>
 		</div>
