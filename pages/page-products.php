@@ -22,6 +22,7 @@ class Simple_Order_Products {
 		?>
 		<h1>Produk</h1>
 		<h2>Total nilai stok: <?php echo SO::currency(SO::get_stock_value()); ?></h2>
+		<h2>Total estimasi laba stok: <?php echo SO::currency(SO::get_stock_profit_value()); ?></h2>
 		<div id="hot-products" style="width:100%"></div>
 		<button class="button button-primary button-add" style="margin-top:10px">Tambah</button>
 		<?php

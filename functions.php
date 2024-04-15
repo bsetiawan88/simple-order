@@ -72,6 +72,11 @@ class SO {
 		return $wpdb->get_var("SELECT SUM(stock_available * price_buy) FROM {$wpdb->_PRODUCTS}");
 	}
 
+	public static function get_stock_profit_value() {
+		global $wpdb;
+		return $wpdb->get_var("SELECT SUM(stock_available * price_sell) FROM {$wpdb->_PRODUCTS}");
+	}
+
 	public static function get_profit() {
 		global $wpdb;
 		$capital_value = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE description = 'Penambahan modal'") + SIMPLE_ORDER_INTIAL_VALUE;
