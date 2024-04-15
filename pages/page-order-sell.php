@@ -201,17 +201,17 @@ class Simple_Order_Sell {
 			}
 		}
 
-		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' AND (P.payment_status != 'complete' OR P.delivery_status != 'complete')";
+		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' ";
 
 		if (isset($_POST['id'])) {
 			$query .= ' AND P.id = ' . intval($_POST['id']);
 		} else if (isset($_POST['data'])) {
 			if ($_POST['data'] == 'pending') {
-				$query .= "P.delivery_status != 'complete'";
+				$query .= " AND P.delivery_status != 'complete'";
 			} else if ($_POST['data'] == 'unpaid') {
-				$query .= "P.payment_status != 'complete'";
+				$query .= " AND P.payment_status != 'complete'";
 			} else if ($_POST['data'] == 'complete') {
-				$query .= "P.delivery_status = 'complete' AND P.payment_status = 'complete')";
+				$query .= " AND P.delivery_status = 'complete' AND P.payment_status = 'complete'";
 			}
 			unset($response['headers']);
 		}
