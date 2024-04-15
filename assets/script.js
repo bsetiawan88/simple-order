@@ -1,5 +1,7 @@
 jQuery(function($) {
 
+	var increment = 0;
+
 	var empty_data = [
 		{
 			__children: []
@@ -187,23 +189,20 @@ jQuery(function($) {
 	function renderer_buy(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
-		var i = 0;
-
 		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
 			parent_row = true;
 		}
 
 		if (parent_row) {
-			td.style.backgroundColor = 'powderblue';
+			td.style.backgroundColor = 'LemonChiffon';
 			td.style.color = 'black';
-			i = 0;
+			increment = 0;
 		} else {
-			if (i % 2 == 0) {
+			if (increment % 2 == 0) {
 				td.style.backgroundColor = 'azure';
 			} else {
 				td.style.backgroundColor = 'white';
 			}
-			i++;
 		}
 
 		if ((prop == 'price' || prop == 'pay_amount') && td.textContent != '') {
@@ -225,6 +224,7 @@ jQuery(function($) {
 			}
 
 			parent_row = false;
+			increment++;
 		}
 	}
 
