@@ -151,12 +151,18 @@ class Simple_Order_Sell {
 		?>
 		<h1>Penjualan</h1>
 		<h2>Total penagihan: <?php echo SO::currency(SO::get_total_remaining()); ?></h2>
+
+		<div>
+			<label for="filter1" class="filter-label"><input id="filter1" class="filter-button" data-action="unpaid" type="radio" name="opt" checked> Belum lunas</label>
+			<label for="filter2" class="filter-label"><input id="filter2" class="filter-button" data-action="pending" type="radio" name="opt"> Belum dikirim</label>
+			<label for="filter3" class="filter-label"><input id="filter3" class="filter-button" data-action="complete" type="radio" name="opt"> Selesai</label>
+		</div>
+
+		<br/>
+
 		<div id="hot-sell"></div>
 		<p>Catatan:</p>
 		<ol>
-			<li>
-			Halaman ini digunakan untuk menampilkan penjualan yang <strong>belum lunas</strong> atau <strong>belum dikirim</strong>.
-			</li>
 			<li>
 			Klik tombol <code>Pembayaran</code> untuk pelunasan.
 			</li>
@@ -199,6 +205,15 @@ class Simple_Order_Sell {
 
 		if (isset($_POST['id'])) {
 			$query .= ' AND P.id = ' . intval($_POST['id']);
+		} else if (isset($_POST['data'])) {
+			if ($_POST['data'] == 'pending') {
+				$query .= "P.delivery_status != 'complete'";
+			} else if ($_POST['data'] == 'unpaid') {
+				$query .= "P.payment_status != 'complete'";
+			} else if ($_POST['data'] == 'complete') {
+				$query .= "P.delivery_status = 'complete' AND P.payment_status = 'complete')";
+			}
+			unset($response['headers']);
 		}
 
 		$results = $wpdb->get_results($query);
