@@ -220,7 +220,7 @@ jQuery(function($) {
 
 			if (id) {
 				var url = simple_order.admin_url + 'admin.php?page=simple-order-buy&id=' + id;
-				td.innerHTML += '<button onclick="window.location.href=\'' + url + '\'">Selesai</button>';
+				td.innerHTML += '<a style="margin-top:5px;" class="button button-primary" href="' + url + '">Selesai</a>';
 			}
 
 			parent_row = false;
@@ -238,6 +238,22 @@ jQuery(function($) {
 
 	function renderer_sell(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
+
+		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
+			parent_row = true;
+		}
+
+		if (parent_row) {
+			td.style.backgroundColor = 'LemonChiffon';
+			td.style.color = 'black';
+			increment = 0;
+		} else {
+			if (increment % 2 == 0) {
+				td.style.backgroundColor = 'azure';
+			} else {
+				td.style.backgroundColor = 'white';
+			}
+		}
 
 		if (prop == 'purchase_date') {
 			if (value != null && value.indexOf('.') > 0 ) {
@@ -264,9 +280,11 @@ jQuery(function($) {
 
 			if (remaining != null) {
 				var url = simple_order.admin_url + 'admin.php?page=simple-order-sell&id=' + id;
-				td.innerHTML += '<button onclick="window.location.href=\'' + url + '\'">Pembayaran</button>'
+				td.innerHTML += '<a style="margin-top:5px;" class="button button-primary" href="' + url + '">Pembayaran</a>';
 			}
 
+			parent_row = false;
+			increment++;
 		}
 	}
 
@@ -332,7 +350,7 @@ jQuery(function($) {
 			var id = instance.getDataAtCell(row, 0);
 			if (id) {
 				td.style.textAlign = 'center';
-				td.innerHTML = '<button onclick="updater({method: \'complete\', id: '+id+'})">Selesai</button>'
+				td.innerHTML += '<a style="margin-top:5px;" class="button button-primary" href="#" onclick="updater({method: \'complete\', id: '+id+'})">Selesai</a>';
 			}
 		}
 	}
