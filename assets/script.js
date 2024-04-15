@@ -194,7 +194,7 @@ jQuery(function($) {
 		}
 
 		if (parent_row) {
-			td.style.backgroundColor = 'LemonChiffon';
+			td.style.backgroundColor = '#fcfae6';
 			td.style.color = 'black';
 			increment = 0;
 		} else {
@@ -244,7 +244,7 @@ jQuery(function($) {
 		}
 
 		if (parent_row) {
-			td.style.backgroundColor = 'LemonChiffon';
+			td.style.backgroundColor = '#fcfbeb';
 			td.style.color = 'black';
 			increment = 0;
 		} else {
