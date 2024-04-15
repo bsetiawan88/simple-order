@@ -187,12 +187,23 @@ jQuery(function($) {
 	function renderer_buy(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
+		var i = 0;
+
 		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
-			create_border = true;
+			parent_row = true;
 		}
 
-		if (create_border) {
-			td.style.borderTop = '1px solid orange';
+		if (parent_row) {
+			td.style.backgroundColor = 'powderblue';
+			td.style.color = 'black';
+			i = 0;
+		} else {
+			if (i % 2 == 0) {
+				td.style.backgroundColor = 'azure';
+			} else {
+				td.style.backgroundColor = 'white';
+			}
+			i++;
 		}
 
 		if ((prop == 'price' || prop == 'pay_amount') && td.textContent != '') {
@@ -213,7 +224,7 @@ jQuery(function($) {
 				td.innerHTML += '<button onclick="window.location.href=\'' + url + '\'">Selesai</button>';
 			}
 
-			create_border = false;
+			parent_row = false;
 		}
 	}
 
