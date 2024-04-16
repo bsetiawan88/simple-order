@@ -191,6 +191,9 @@ jQuery(function($) {
 
 		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
 			parent_row = true;
+		} else {
+			parent_row = false;
+			increment++;
 		}
 
 		if (parent_row) {
@@ -222,9 +225,6 @@ jQuery(function($) {
 				var url = simple_order.admin_url + 'admin.php?page=simple-order-buy&id=' + id;
 				td.innerHTML += '<a style="margin-top:5px;" class="button button-primary" href="' + url + '">Selesai</a>';
 			}
-
-			parent_row = false;
-			increment++;
 		}
 	}
 
@@ -241,10 +241,13 @@ jQuery(function($) {
 
 		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
 			parent_row = true;
+		} else {
+			parent_row = false;
+			increment++;
 		}
 
 		if (parent_row) {
-			td.style.backgroundColor = '#fcfbeb';
+			td.style.backgroundColor = '#fcfae6';
 			td.style.color = 'black';
 			increment = 0;
 		} else {
@@ -282,9 +285,6 @@ jQuery(function($) {
 				var url = simple_order.admin_url + 'admin.php?page=simple-order-sell&id=' + id;
 				td.innerHTML += '<a style="margin-top:5px;" class="button button-primary" href="' + url + '">Pembayaran</a>';
 			}
-
-			parent_row = false;
-			increment++;
 		}
 	}
 
@@ -337,6 +337,25 @@ jQuery(function($) {
 	function renderer_delivery(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
+		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
+			parent_row = true;
+		} else {
+			parent_row = false;
+			increment++;
+		}
+
+		if (parent_row) {
+			td.style.backgroundColor = '#fcfae6';
+			td.style.color = 'black';
+			increment = 0;
+		} else {
+			if (increment % 2 == 0) {
+				td.style.backgroundColor = 'azure';
+			} else {
+				td.style.backgroundColor = 'white';
+			}
+		}
+		
 		if (prop == 'pay_amount' && td.textContent != '') {
 			td.style.textAlign = 'right';
 			td.textContent = currency(td.textContent);
