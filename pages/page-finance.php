@@ -66,6 +66,12 @@ class Simple_Order_Finance {
 
 		$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->_FINANCE} WHERE method = %s ORDER BY id ASC LIMIT 100", $method));
 
+		if ($results) {
+			for ($i = 0; $i < count($results); $i++) {
+				$results[$i]->date = wp_date('l, d F Y', strtotime($results[$i]->date));
+			}
+		}
+
 		$response['table'] = $results;
 		$response['columns'] = [
 			['data' => 'id', 'readOnly' => true],
