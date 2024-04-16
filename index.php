@@ -62,10 +62,10 @@ class Simple_Order {
 		a[href="admin.php?page=simple-order-sell"] { border-top:1px solid red; }
 		a[href="admin.php?page=simple-order-finance-transfer"] { border-top:1px solid red; }
 		.ht_master tr:nth-of-type(even) > td {
-			background-color: #e6ffe6;
+			background-color: #edfced;
 		}
 		.ht_master tr:nth-of-type(even):nth-child(4n+2) > td {
-			background-color: #d1ecf1;
+			background-color: #e8fcfc;
 		}
 		.filter-label {
 			border: 1px solid black;
