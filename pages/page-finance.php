@@ -68,7 +68,7 @@ class Simple_Order_Finance {
 
 		if ($results) {
 			for ($i = 0; $i < count($results); $i++) {
-				$results[$i]->date = wp_date('l, d F Y', strtotime($results[$i]->date));
+				$results[$i]->date = wp_date('l, d F Y - H:i:s', strtotime($results[$i]->date));
 			}
 		}
 
