@@ -78,7 +78,7 @@ class Simple_Order_Buy {
 			}
 			unset($response['headers']);
 		} else {
-			$query .= $wpdb->prepare("(P.delivery_status = %s OR F.invoice IS NULL)", 'pending');
+			$query .= "P.delivery_status = 'pending'";
 		}
 
 		$query .= ' GROUP BY P.id';
