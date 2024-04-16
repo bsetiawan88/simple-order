@@ -214,6 +214,8 @@ class Simple_Order_Sell {
 				$query .= " AND P.delivery_status = 'complete' AND P.payment_status = 'complete'";
 			}
 			unset($response['headers']);
+		} else {
+			$query .= " AND P.payment_status != 'complete'";
 		}
 
 		$results = $wpdb->get_results($query);
