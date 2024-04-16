@@ -114,7 +114,7 @@ class Simple_Order_Buy {
 			['data' => 'action', 'readOnly' => true],
 		];
 
-		if (isset($_POST['id'])) {
+		if (isset($_POST['id']) || (isset($_POST['data']) && $_POST['data'] == 'complete')) {
 			$i = count($response['columns']) - 1;
 			unset($response['columns'][$i]);
 		}
