@@ -66,6 +66,8 @@ class Simple_Order_delivery {
 		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_PURCHASES} WHERE courier_id IS NOT NULL AND courier_id != 0 AND delivery_status != 'complete'");
 
 		for ($i = 0; $i < count($results); $i++) {
+			$results[$i]->delivery_scheduled_date = wp_date('l, d F Y', strtotime($results[$i]->delivery_scheduled_date));
+
 			$results[$i]->courier_name = SO::get($wpdb->_COURIERS, 'id', $results[$i]->courier_id)->name;
 			$results[$i]->store_name = SO::get($wpdb->_STORES, 'id', $results[$i]->store_id)->store_name;
 

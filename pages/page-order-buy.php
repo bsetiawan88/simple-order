@@ -86,6 +86,8 @@ class Simple_Order_Buy {
 		$results = $wpdb->get_results($query);
 
 		for ($i = 0; $i < count($results); $i++) {
+			$results[$i]->date = wp_date('l, d F Y - H:i:s', strtotime($results[$i]->date));
+
 			// get products
 			$details = $wpdb->get_results($wpdb->prepare("SELECT D.*, P.product_name FROM {$wpdb->_PURCHASE_DETAILS} D LEFT JOIN {$wpdb->_PRODUCTS} P ON D.product_id = P.id WHERE D.purchase_id = %d", $results[$i]->id));
 

@@ -221,6 +221,12 @@ class Simple_Order_Sell {
 		$results = $wpdb->get_results($query);
 
 		for ($i = 0; $i < count($results); $i++) {
+			$results[$i]->purchase_date = wp_date('l, d F Y', strtotime($results[$i]->purchase_date));
+
+			if ($results[$i]->delivery_scheduled_date) {
+				$results[$i]->delivery_scheduled_date = wp_date('l, d F Y', strtotime($results[$i]->delivery_scheduled_date));
+			}
+			
 			if ($results[$i]->payment_status == 'complete') {
 				$results[$i]->remaining = null;
 			} else {
@@ -232,7 +238,7 @@ class Simple_Order_Sell {
 			}
 
 			if ($results[$i]->payment_scheduled_date) {
-				$results[$i]->purchase_date .= '.' . $results[$i]->payment_scheduled_date;
+				$results[$i]->purchase_date .= '.' . wp_date('l, d F Y', strtotime($results[$i]->payment_scheduled_date));
 			}
 
 			// get products
