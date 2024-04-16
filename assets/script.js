@@ -189,10 +189,13 @@ jQuery(function($) {
 	function renderer_buy(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
-		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
+		if (instance.getDataAtCell(row, 0) != null) {
 			parent_row = true;
 		} else {
 			parent_row = false;
+		}
+
+		if (prop == 'id') {
 			increment++;
 		}
 
@@ -239,10 +242,13 @@ jQuery(function($) {
 	function renderer_sell(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
-		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
+		if (instance.getDataAtCell(row, 0) != null) {
 			parent_row = true;
 		} else {
 			parent_row = false;
+		}
+
+		if (prop == 'id') {
 			increment++;
 		}
 
@@ -337,10 +343,13 @@ jQuery(function($) {
 	function renderer_delivery(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.renderers.TextRenderer.apply(this, arguments);
 
-		if (prop == 'id' && instance.getDataAtCell(row, 0) != null) {
+		if (instance.getDataAtCell(row, 0) != null) {
 			parent_row = true;
 		} else {
 			parent_row = false;
+		}
+
+		if (prop == 'id') {
 			increment++;
 		}
 
