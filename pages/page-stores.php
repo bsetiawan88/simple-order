@@ -85,7 +85,8 @@ class Simple_Order_Stores {
 			];
 
 			$response['columns'][] = [
-				'data' => 'sales_0'
+				'data' => 'sales_0',
+				'readOnly' => true
 			];
 
 			for ($i = 0; $i < count($results); $i++) {
