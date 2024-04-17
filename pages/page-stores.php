@@ -89,6 +89,8 @@ class Simple_Order_Stores {
 			];
 
 			for ($i = 0; $i < count($results); $i++) {
+				if ($results[$i]->type != 'sell') continue;
+				
 				$count = SO::get_sales_count($results[$i]->id);
 				if ($count) {
 					$results[$i]->sales_0 = SO::currency(SO::get_sales_month($results[$i]->id)) . ' / ' . $count;
