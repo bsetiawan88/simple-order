@@ -10,7 +10,7 @@ jQuery(function($) {
 
 	if ($('.datepicker').length > 0) {
 		$('.datepicker').datepicker({
-			dateFormat: 'DD, d MM yy'
+			dateFormat: 'dd-mm-yy'
 		});
 	}
 
