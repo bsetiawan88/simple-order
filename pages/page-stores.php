@@ -81,7 +81,7 @@ class Simple_Order_Stores {
 		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_STORES} ORDER BY type, store_name ASC");
 		if ($results) {
 			$response['headers'][] = [
-				'Omzet ' . date('F', time())
+				'Omzet ' . date('F Y', time())
 			];
 
 			$response['columns'][] = [
@@ -90,7 +90,7 @@ class Simple_Order_Stores {
 
 			for ($i = 0; $i < count($results); $i++) {
 				if ($results[$i]->type != 'sell') continue;
-				
+
 				$count = SO::get_sales_count($results[$i]->id);
 				if ($count) {
 					$results[$i]->sales_0 = SO::currency(SO::get_sales_month($results[$i]->id)) . ' / ' . $count;
