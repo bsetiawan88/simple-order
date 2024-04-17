@@ -97,6 +97,30 @@ class SO {
 		return intval($wpdb->get_var("SELECT count(*) FROM {$wpdb->_PURCHASES} WHERE type = '{$type}' AND delivery_status != 'complete'"));
 	}
 
+	public static function get_sales_month($store_id, $month = 0) {
+		global $wpdb;
+
+		if (empty($month)) {
+			$month = date('m', time());
+		} else {
+			$month = date('m', strtotime("-$month months"));
+		}
+
+		return $wpdb->get_var($wpdb->prepare("SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE store_id = %d AND type = %s AND MONTH(purchase_date) = %d", $store_id, 'sell', $month));
+	}
+
+	public static function get_sales_count($store_id, $month = 0) {
+		global $wpdb;
+
+		if (empty($month)) {
+			$month = date('m', time());
+		} else {
+			$month = date('m', strtotime("-$month months"));
+		}
+
+		return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->_PURCHASES} WHERE store_id = %d AND type = %s AND MONTH(purchase_date) = %d", $store_id, 'sell', $month));
+	}
+
 	public static function update_stock($product_id, $field, $new_stock, $mode = 'increase') {
 		global $wpdb;
 

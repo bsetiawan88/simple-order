@@ -382,6 +382,15 @@ jQuery(function($) {
 			}
 		}
 	}
+
+	function renderer_stores(instance, td, row, col, prop, value, cellProperties) {
+		Handsontable.renderers.TextRenderer.apply(this, arguments);
+
+		if (prop.indexOf('sales') != -1) {
+			td.style.textAlign = 'right';
+		}
+	}
+	
 	
 	function create_table(selector, headers) {
 		var container = document.querySelector(selector, headers);
@@ -434,6 +443,7 @@ jQuery(function($) {
 	}
 
 	if ($('#hot-stores').length > 0) {
+		renderer = renderer_stores;
 		updater = load_stores;
 		updater();
 	}

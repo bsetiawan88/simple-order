@@ -69,8 +69,6 @@ class Simple_Order_Stores {
 			}
 		}
 
-		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_STORES} ORDER BY type, store_name ASC");
-		$response['table'] = $results;
 		$response['columns'] = [
 			['data' => 'id', 'readOnly' => true],
 			['data' => 'type', 'type' => 'dropdown', 'source' => ['sell', 'buy']],
@@ -79,6 +77,26 @@ class Simple_Order_Stores {
 			['data' => 'phone'],
 			['data' => 'contact'],
 		];
+
+		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_STORES} ORDER BY type, store_name ASC");
+		if ($results) {
+			$response['headers'][] = [
+				'Omzet ' . date('F', time())
+			];
+
+			$response['columns'][] = [
+				'data' => 'sales_0'
+			];
+
+			for ($i = 0; $i < count($results); $i++) {
+				$count = SO::get_sales_count($results[$i]->id);
+				if ($count) {
+					$results[$i]->sales_0 = SO::currency(SO::get_sales_month($results[$i]->id)) . ' / ' . $count;
+				}
+			}
+		}
+
+		$response['table'] = $results;
 
 		wp_send_json_success($response);
 	}
