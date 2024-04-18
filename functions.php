@@ -79,9 +79,9 @@ class SO {
 		return $remaining;
 	}
 
-	public static function get_pending_in_stock_value() {
+	public static function get_stock_pending_in_value() {
 		global $wpdb;
-		return $wpdb->get_var("SELECT SUM(amount) FROM {$wpdb->_PURCHASE_DETAILS} WHERE purchase_id IN (SELECT id FROM $wpdb->_PURCHASES WHERE type = 'buy' AND delivery_status != 'complete')");
+		return $wpdb->get_var("SELECT SUM(stock_pending_in * price_buy) FROM {$wpdb->_PRODUCTS}");
 	}
 
 	public static function get_stock_value() {
