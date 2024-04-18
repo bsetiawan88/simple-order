@@ -25,6 +25,7 @@ class Simple_Order_Dashboard {
 		$cash = SO::get_balance_cash();
 		$stock_value = SO::get_stock_value();
 		$stock_pending_value = SO::get_pending_in_stock_value();
+		$stock_profit_value = SO::get_stock_profit_value();
 		?>
 		<h1>Rangkuman</h1>
 		
@@ -34,6 +35,10 @@ class Simple_Order_Dashboard {
 		<h2>Saldo tunai: <?php echo SO::currency($cash); ?></h2>
 		<h2>Nilai stok: <?php echo SO::currency($stock_value); ?></h2>
 		<h2>Total aset: <?php echo SO::currency($transfer + $cash + $stock_value); ?></h2>
+
+		<hr>
+
+		<h2>Estimasi laba stok: <?php echo SO::currency($stock_profit_value); ?></h2>
 		<h2>Nilai stok belum diterima: <?php echo SO::currency($stock_pending_value); ?></h2>
 
 		<hr>
