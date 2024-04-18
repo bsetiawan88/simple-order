@@ -35,14 +35,17 @@ class Simple_Order_Dashboard {
 		<h2>Saldo transfer: <?php echo SO::currency($transfer); ?></h2>
 		<h2>Saldo tunai: <?php echo SO::currency($cash); ?></h2>
 		<h2>Nilai stok: <?php echo SO::currency($stock_value); ?></h2>
-		<h2>Total aset: <?php echo SO::currency($transfer + $cash + $stock_value); ?></h2>
+		<h2>Total aset: <?php echo  SO::currency($transfer) . ' + ' . SO::currency($cash) . ' + ' . SO::currency($stock_value) . ' = ' . SO::currency($transfer + $cash + $stock_value); ?></h2>
+
+		<hr>
+
+		<h2>Nilai stok belum diterima: <?php echo SO::currency($stock_pending_value); ?></h2>
 
 		<hr>
 
 		<h2>Estimasi laba stok: <?php echo SO::currency($stock_profit_value); ?></h2>
-		<h2>Nilai stok belum diterima: <?php echo SO::currency($stock_pending_value); ?></h2>
 		<h2>Estimasi laba stok belum diterima: <?php echo SO::currency($stock_pending_profit_value); ?></h2>
-		<h2>Total estimasi laba: <?php echo SO::currency($stock_profit_value + $stock_pending_profit_value); ?></h2>
+		<h2>Total estimasi laba: <?php echo SO::currency($stock_profit_value) . ' + ' . SO::currency($stock_pending_profit_value) . ' = ' . SO::currency($stock_profit_value + $stock_pending_profit_value); ?></h2>
 
 		<hr>
 
