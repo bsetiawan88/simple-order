@@ -56,11 +56,23 @@ class SO {
 		return $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM {$wpdb->_FINANCE} WHERE purchase_id = %d", $purchase_id));
 	}
 	
-	public static function get_total_remaining() {
+	public static function get_total_remaining($month = null) {
 		global $wpdb;
-		$pay_amount = $wpdb->get_var("SELECT sum(pay_amount) FROM {$wpdb->_PURCHASES} WHERE payment_status != 'complete'");
+
+		$where = '';
+		if ($month === 0) {
+			$query_month = date('m', time());
+		} else if (!empty($month)) {
+			$query_month = date('m', strtotime("+$month months"));
+		}
+
+		if (isset($query_month)) {
+			$where = $wpdb->prepare(" AND MONTH(payment_scheduled_date) = %d", $query_month);
+		}
+
+		$pay_amount = $wpdb->get_var("SELECT sum(pay_amount) FROM {$wpdb->_PURCHASES} WHERE payment_status != 'complete' {$where}");
 		$paid = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE purchase_id IN (
-			SELECT id FROM {$wpdb->_PURCHASES} WHERE payment_status != 'complete'
+			SELECT id FROM {$wpdb->_PURCHASES} WHERE payment_status != 'complete' {$where}
 		)");
 
 		$remaining = $pay_amount - $paid;

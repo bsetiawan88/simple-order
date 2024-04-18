@@ -38,7 +38,12 @@ class Simple_Order_Dashboard {
 
 		<hr>
 
+		<h2>Total penagihan tempo <?php echo date('F Y'); ?>: <?php echo SO::currency(SO::get_total_remaining(0)); ?></h2>
+		<h2>Total penagihan tempo <?php echo date('F Y', strtotime('+1 months')); ?>: <?php echo SO::currency(SO::get_total_remaining(1)); ?></h2>
 		<h2>Total penagihan: <?php echo SO::currency(SO::get_total_remaining()); ?></h2>
+
+		<hr>
+		
 		<h2>Laba: <?php echo SO::currency(SO::get_profit()); ?></h2>
 
 		<hr>
