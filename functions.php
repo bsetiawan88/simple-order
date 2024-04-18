@@ -100,7 +100,7 @@ class SO {
 		global $wpdb;
 		$value = $wpdb->get_var("SELECT SUM(stock_pending_in * price_sell) FROM {$wpdb->_PRODUCTS}");
 
-		return $value - self::get_stock_value();
+		return $value;
 	}
 
 	public static function get_profit() {
