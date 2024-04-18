@@ -96,6 +96,13 @@ class SO {
 		return $value - self::get_stock_value();
 	}
 
+	public static function get_stock_pending_profit_value() {
+		global $wpdb;
+		$value = $wpdb->get_var("SELECT SUM(stock_pending_in * price_sell) FROM {$wpdb->_PRODUCTS}");
+
+		return $value - self::get_stock_value();
+	}
+
 	public static function get_profit() {
 		global $wpdb;
 		$capital_value = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE description = 'Penambahan modal'") + SIMPLE_ORDER_INTIAL_VALUE;

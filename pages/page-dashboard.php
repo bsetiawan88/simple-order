@@ -26,6 +26,7 @@ class Simple_Order_Dashboard {
 		$stock_value = SO::get_stock_value();
 		$stock_pending_value = SO::get_pending_in_stock_value();
 		$stock_profit_value = SO::get_stock_profit_value();
+		$stock_pending_profit_value = SO::get_stock_pending_profit_value();
 		?>
 		<h1>Rangkuman</h1>
 		
@@ -40,6 +41,7 @@ class Simple_Order_Dashboard {
 
 		<h2>Estimasi laba stok: <?php echo SO::currency($stock_profit_value); ?></h2>
 		<h2>Nilai stok belum diterima: <?php echo SO::currency($stock_pending_value); ?></h2>
+		<h2>Estimasi laba stok belum diterima: <?php echo SO::currency($stock_pending_value); ?></h2>
 
 		<hr>
 
