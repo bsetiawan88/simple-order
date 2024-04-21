@@ -103,12 +103,44 @@ class SO {
 		return $value - self::get_stock_pending_in_value();
 	}
 
-	public static function get_profit() {
+	public static function get_profit($month = null) {
 		global $wpdb;
-		$capital_value = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE description = 'Penambahan modal'") + SIMPLE_ORDER_INTIAL_VALUE;
-		$current_balance = self::get_balance_transfer() + self::get_balance_cash() + self::get_stock_value();
 
-		return $current_balance - $capital_value;
+		$where = '';
+		if ($month === 0) {
+			$query_month = date('m', time());
+		} else if (!empty($month)) {
+			$query_month = date('m', strtotime("+$month months"));
+		}
+
+		if (isset($query_month)) {
+			$where = $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
+		}
+
+		$profit = $wpdb->get_var("SELECT sum(profit) FROM {$wpdb->_PURCHASES} WHERE payment_status = 'complete' {$where}");
+
+		return $profit;
+	}
+
+	public static function calculate_profit() {
+		global $wpdb;
+
+		$query = "SELECT * FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND profit IS NULL";
+		$results = $wpdb->get_results($query);
+
+		if ($results) {
+			foreach ($results as $row) {
+				$details = $wpdb->get_results($wpdb->prepare("SELECT D.qty, P.price_buy FROM {$wpdb->_PURCHASE_DETAILS} D LEFT JOIN {$wpdb->_PRODUCTS} P ON D.product_id = P.id WHERE D.purchase_id = %d", $row->id));
+	
+				$price_buy = 0;
+				foreach ($details as $d) {
+					$price_buy += ($d->qty * $d->price_buy);
+				}
+	
+				$profit = $row->pay_amount - $price_buy;
+				$wpdb->update($wpdb->_PURCHASES, ['profit' => $profit], ['id' => $row->id]);
+			}
+		}
 	}
 
 	public static function get_undelivered_count($type) {

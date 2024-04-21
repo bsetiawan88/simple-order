@@ -21,6 +21,8 @@ class Simple_Order_Dashboard {
 	public function page() {
 		global $wpdb;
 
+		SO::calculate_profit();
+
 		$transfer = SO::get_balance_transfer();
 		$cash = SO::get_balance_cash();
 		$stock_value = SO::get_stock_value();
@@ -43,7 +45,7 @@ class Simple_Order_Dashboard {
 
 		<hr>
 
-		<h2>Estimasi laba stok: <?php echo SO::currency($stock_profit_value); ?></h2>
+		<h2>Estimasi laba stok tersedia: <?php echo SO::currency($stock_profit_value); ?></h2>
 		<h2>Estimasi laba stok belum diterima: <?php echo SO::currency($stock_pending_profit_value); ?></h2>
 		<h2>Total estimasi laba: <?php echo SO::currency($stock_profit_value) . ' + ' . SO::currency($stock_pending_profit_value) . ' = ' . SO::currency($stock_profit_value + $stock_pending_profit_value); ?></h2>
 
@@ -55,7 +57,8 @@ class Simple_Order_Dashboard {
 
 		<hr>
 
-		<h2>Laba: <?php echo SO::currency(SO::get_profit()); ?></h2>
+		<h2>Laba <?php echo wp_date('F Y'); ?>: <?php echo SO::currency(SO::get_profit(0)); ?></h2>
+		<h2>Laba <?php echo wp_date('F Y', strtotime('+1 months')); ?>: <?php echo SO::currency(SO::get_profit(1)); ?></h2>
 
 		<hr>
 

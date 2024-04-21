@@ -8,7 +8,6 @@ Author: Bagus Pribadi Setiawan
 class Simple_Order {
 
 	public function __construct() {
-		define('SIMPLE_ORDER_INTIAL_VALUE', 19887850);
 		define('SIMPLE_ORDER_PLUGIN_FILE', __FILE__);
 
 		register_activation_hook(__FILE__, [$this, 'plugin_activate']);
@@ -114,7 +113,8 @@ class Simple_Order {
 				discount INT,
 				additional_fee INT,
 				total INT,
-				pay_amount INT
+				pay_amount INT,
+				profit INT
 			)",
 			"CREATE TABLE IF NOT EXISTS {$wpdb->_PURCHASE_DETAILS} (
 				id INT AUTO_INCREMENT PRIMARY KEY,
