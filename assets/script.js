@@ -273,9 +273,7 @@ jQuery(function($) {
 
 		if ((prop == 'pay_amount' || prop == 'remaining' || prop == 'price' || prop == 'profit') && td.textContent != '') {
 			td.style.textAlign = 'right';
-			if (value != '-') {
-				td.textContent = currency(td.textContent);
-			}
+			td.textContent = currency(td.textContent);
 		}
 
 		if (prop == 'qty') {
