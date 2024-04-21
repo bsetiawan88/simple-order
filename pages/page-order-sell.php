@@ -178,7 +178,7 @@ class Simple_Order_Sell {
 		global $wpdb;
 
 		$response = [
-			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga jual', 'Jumlah', 'Nominal', 'Sisa bayar', 'Jadwal kirim', ''],
+			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga jual', 'Jumlah', 'Nominal', 'Sisa bayar', 'Profit', 'Jadwal kirim', ''],
 		];
 
 		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' ";
@@ -245,6 +245,7 @@ class Simple_Order_Sell {
 			['data' => 'qty', 'readOnly' => true],
 			['data' => 'pay_amount', 'readOnly' => true],
 			['data' => 'remaining', 'readOnly' => true],
+			['data' => 'profit', 'readOnly' => true],
 			['data' => 'delivery_scheduled_date', 'readOnly' => true],
 			['data' => 'action', 'readOnly' => true],
 		];
