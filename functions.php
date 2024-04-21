@@ -113,11 +113,12 @@ class SO {
 			$query_month = date('m', strtotime("+$month months"));
 		}
 
+		$query = "SELECT sum(profit) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status = 'complete' ";
 		if (isset($query_month)) {
-			$where = $wpdb->prepare(" AND ((MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d)))", $query_month, $query_month);
+			$query .= $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
 
-		$profit = $wpdb->get_var("SELECT sum(profit) FROM {$wpdb->_PURCHASES} WHERE payment_status = 'complete' {$where}");
+		$profit = $wpdb->get_var($query);
 
 		return $profit;
 	}
