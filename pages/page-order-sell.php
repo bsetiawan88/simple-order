@@ -181,26 +181,6 @@ class Simple_Order_Sell {
 			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga jual', 'Jumlah', 'Nominal', 'Sisa bayar', 'Jadwal kirim', ''],
 		];
 
-		if (isset($_POST['method']) && $_POST['method'] == 'complete') {
-			unset($response['headers']);
-
-			$id = $_POST['id'];
-			$result = $wpdb->update($wpdb->_PURCHASES, [
-				'delivery_status' => 'complete'
-			], [
-				'id' => $id
-			]);
-
-			if ($result) {
-				$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $purchase->id);
-
-				foreach ($purchase_details as $d) {
-					SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
-					SO::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
-				}
-			}
-		}
-
 		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' ";
 
 		if (isset($_POST['id'])) {

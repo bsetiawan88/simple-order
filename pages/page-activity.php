@@ -438,6 +438,8 @@ class Simple_Order_Activity {
 			], [
 				'id' => $purchase_id
 			]);
+
+			SO::calculate_profit();
 		}
 	}
 
