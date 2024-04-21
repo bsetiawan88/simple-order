@@ -114,7 +114,7 @@ class SO {
 		}
 
 		if (isset($query_month)) {
-			$where = $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
+			$where = $wpdb->prepare(" AND ((MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d)))", $query_month, $query_month);
 		}
 
 		$profit = $wpdb->get_var("SELECT sum(profit) FROM {$wpdb->_PURCHASES} WHERE payment_status = 'complete' {$where}");
