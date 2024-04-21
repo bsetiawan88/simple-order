@@ -58,7 +58,6 @@ class Simple_Order_Dashboard {
 		<hr>
 
 		<h2>Laba <?php echo wp_date('F Y'); ?>: <?php echo SO::currency(SO::get_profit(0)); ?></h2>
-		<h2>Laba <?php echo wp_date('F Y', strtotime('+1 months')); ?>: <?php echo SO::currency(SO::get_profit(1)); ?></h2>
 
 		<hr>
 
