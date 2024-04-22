@@ -66,7 +66,9 @@ class Simple_Order_Products {
 			$results[$i]->stock_value = $results[$i]->stock_available * $results[$i]->price_buy;
 		}
 
+		$response['sortable'] = true;
 		$response['table'] = $results;
+		
 		$response['columns'] = [
 			['data' => 'id', 'readOnly' => true],
 			['data' => 'product_name'],

@@ -156,6 +156,9 @@ class Simple_Order_Sell {
 			<label for="filter1" class="filter-label"><input id="filter1" class="filter-button" data-action="unpaid" type="radio" name="opt" checked> Belum lunas</label>
 			<label for="filter2" class="filter-label"><input id="filter2" class="filter-button" data-action="pending" type="radio" name="opt"> Belum dikirim</label>
 			<label for="filter3" class="filter-label"><input id="filter3" class="filter-button" data-action="complete" type="radio" name="opt"> Selesai</label>
+
+			<a class="button button-table expand-all"><span class="dashicons dashicons-editor-expand"></span></a>
+			<a class="button button-table collapse-all"><span class="dashicons dashicons-editor-contract"></span></a>
 		</div>
 
 		<br/>

@@ -47,9 +47,9 @@ jQuery(function($) {
 		});
 	}
 
-	var hot;
 	var renderer;
 
+	window.hot = null;
 	window.updater = null;
 
 	function currency(number) {
@@ -77,21 +77,20 @@ jQuery(function($) {
 				} else {
 					data = response.data.table;
 				}
-				hot.loadData(data);
-
-				// if (typeof data.id == 'undefined') {
-				// 	setTimeout(function() {
-				// 		nestedRowsPlugin = hot.getPlugin('nestedRows');
-				// 		nestedRowsPlugin.collapsingUI.collapseAll();
-				// 	}, 500);
-				// }
+				window.hot.loadData(data);
 			}
 
 			setTimeout(function() {
-				hot.updateSettings({
+				var new_settings = {
 					columns: response.data.columns,
 					colWidths: [20]
-				});
+				};
+
+				if (typeof response.data.sortable != 'undefined') {
+					new_settings.columnSorting = true;
+				}
+
+				window.hot.updateSettings(new_settings);
 			}, 300);
 		});
 	}
@@ -395,7 +394,6 @@ jQuery(function($) {
 		hot = new Handsontable(container, {
 			data: empty_data,
 			colHeaders: headers,
-			columnSorting: true,
 			preventOverflow: 'horizontal',
 			rowHeaders: true,
 			nestedRows: true,
@@ -411,7 +409,7 @@ jQuery(function($) {
 				}
 				
 				change.forEach(function(row) {
-					var id = hot.getDataAtCell(row[0], 0);
+					var id = window.hot.getDataAtCell(row[0], 0);
 					var field = row[1];
 					var before = row[2];
 					var after = row[3];
@@ -428,7 +426,7 @@ jQuery(function($) {
 		});
 
 		if (typeof renderer != 'undefined') {
-			hot.updateSettings({
+			window.hot.updateSettings({
 				renderer: renderer
 			});
 		}
@@ -513,4 +511,13 @@ jQuery(function($) {
 		updater({data: $(this).data('action')});
 	});
 
+	$('.expand-all').on('click', function() {
+		nestedRowsPlugin = window.hot.getPlugin('nestedRows');
+		nestedRowsPlugin.collapsingUI.expandAll();
+	});
+
+	$('.collapse-all').on('click', function() {
+		nestedRowsPlugin = window.hot.getPlugin('nestedRows');
+		nestedRowsPlugin.collapsingUI.collapseAll();
+	});
 });
