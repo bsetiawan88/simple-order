@@ -131,14 +131,9 @@ class SO {
 
 		if ($results) {
 			foreach ($results as $row) {
-				$details = $wpdb->get_results($wpdb->prepare("SELECT D.qty, P.price_buy FROM {$wpdb->_PURCHASE_DETAILS} D LEFT JOIN {$wpdb->_PRODUCTS} P ON D.product_id = P.id WHERE D.purchase_id = %d", $row->id));
+				$total = $wpdb->get_var($wpdb->prepare("SELECT SUM(D.qty * P.price_buy) FROM {$wpdb->_PURCHASE_DETAILS} D LEFT JOIN {$wpdb->_PRODUCTS} P ON D.product_id = P.id WHERE D.purchase_id = %d", $row->id));
 	
-				$price_buy = 0;
-				foreach ($details as $d) {
-					$price_buy += ($d->qty * $d->price_buy);
-				}
-	
-				$profit = $row->pay_amount - $price_buy;
+				$profit = $row->pay_amount - $total;
 				$wpdb->update($wpdb->_PURCHASES, ['profit' => $profit], ['id' => $row->id]);
 			}
 		}
