@@ -77,9 +77,10 @@ class Simple_Order {
 			margin-right:5px;
 		}
 		.text-right {
-			text-align: right!important;
+			text-align:right!important;
 		}
 		.dashboard-item {
+			display:inline-block;
 			vertical-align:top;
 			width:45%!important;
 		}
