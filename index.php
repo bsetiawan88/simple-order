@@ -76,6 +76,9 @@ class Simple_Order {
 			padding-top:5px!important;
 			margin-right:5px;
 		}
+		.text-right {
+			text-align: right!important;
+		}
 		</style>';
 		wp_enqueue_style('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.css');
 		wp_enqueue_script('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.js');

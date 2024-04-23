@@ -26,7 +26,8 @@ class Simple_Order_Dashboard {
 		$transfer = SO::get_balance_transfer();
 		$cash = SO::get_balance_cash();
 		$stock_value = SO::get_stock_value();
-		$stock_pending_value = SO::get_stock_pending_in_value();
+		$stock_pending_in_value = SO::get_stock_pending_in_value();
+		$stock_pending_out_value = SO::get_stock_pending_out_value();
 		$stock_profit_value = SO::get_stock_profit_value();
 		$stock_pending_profit_value = SO::get_stock_pending_profit_value();
 		?>
@@ -34,35 +35,116 @@ class Simple_Order_Dashboard {
 		
 		<hr>
 
-		<h2>Saldo transfer: <?php echo SO::currency($transfer); ?></h2>
-		<h2>Saldo tunai: <?php echo SO::currency($cash); ?></h2>
-		<h2>Nilai stok: <?php echo SO::currency($stock_value); ?></h2>
-		<h2>Total aset: <?php echo  SO::currency($transfer) . ' + ' . SO::currency($cash) . ' + ' . SO::currency($stock_value) . ' = ' . SO::currency($transfer + $cash + $stock_value); ?></h2>
+		<table class="wp-list-table widefat striped table-view-list" style="width:40%!important;">
+			<thead>
+				<tr>
+					<th colspan="2">Aset</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>Saldo transfer</strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($transfer); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Saldo tunai</strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($cash); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Nilai stok</strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($stock_value); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Total</strong></td>
+					<td class="text-right" style="color:red"><strong><?php echo SO::currency($transfer + $cash + $stock_value); ?></strong></td>
+				</tr>
+			</tbody>
+		</table>
 
 		<hr>
 
-		<h2>Nilai stok belum diterima: <?php echo SO::currency($stock_pending_value); ?></h2>
+		<table class="wp-list-table widefat striped table-view-list" style="width:40%!important;">
+			<thead>
+				<tr>
+					<th colspan="2">Estimasi laba berdasarkan stok</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>Stok tersedia</strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($stock_profit_value); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Stok belum diterima</strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($stock_pending_profit_value); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Total</strong></td>
+					<td class="text-right" style="color:red"><strong><?php echo SO::currency($stock_profit_value + $stock_pending_profit_value); ?></strong></td>
+				</tr>
+			</tbody>
+		</table>
 
 		<hr>
 
-		<h2>Estimasi laba stok tersedia: <?php echo SO::currency($stock_profit_value); ?></h2>
-		<h2>Estimasi laba stok belum diterima: <?php echo SO::currency($stock_pending_profit_value); ?></h2>
-		<h2>Total estimasi laba: <?php echo SO::currency($stock_profit_value) . ' + ' . SO::currency($stock_pending_profit_value) . ' = ' . SO::currency($stock_profit_value + $stock_pending_profit_value); ?></h2>
+		<table class="wp-list-table widefat striped table-view-list" style="width:40%!important;">
+			<thead>
+				<tr>
+					<th></th>
+					<th class="text-right">Jumlah</th>
+					<th class="text-right">Nilai</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>Pembelian belum diterima</strong></td>
+					<td class="text-right"><strong><?php echo SO::get_undelivered_count('buy'); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($stock_pending_in_value); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Penjualan belum dikirim</strong></td>
+					<td class="text-right"><strong><?php echo SO::get_undelivered_count('sell'); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($stock_pending_out_value); ?></strong></td>
+				</tr>
+			</tbody>
+		</table>
 
 		<hr>
 
-		<h2>Total penagihan tempo <?php echo wp_date('F Y'); ?>: <?php echo SO::currency(SO::get_total_remaining(0)); ?></h2>
-		<h2>Total penagihan tempo <?php echo wp_date('F Y', strtotime('+1 months')); ?>: <?php echo SO::currency(SO::get_total_remaining(1)); ?></h2>
-		<h2>Total penagihan: <?php echo SO::currency(SO::get_total_remaining()); ?></h2>
+		<table class="wp-list-table widefat striped table-view-list" style="width:90%!important;">
+			<thead>
+				<tr>
+					<th style="width:70px"></th>
+					<th class="text-right">Jumlah penjualan</th>
+					<th class="text-right">Nominal penagihan</th>
+					<th class="text-right">Laba penagihan (belum lunas)</th>
+					<th class="text-right">Laba (penjualan lunas)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong><?php echo wp_date('F Y'); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::get_sales_count(0); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(0)); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(0)); ?></strong></td>
+					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(0, true)); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong><?php echo wp_date('F Y', strtotime('+1 months')); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::get_sales_count(1); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(1)); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(1)); ?></strong></td>
+					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(1, true)); ?></strong></td>
+				</tr>
+				<tr>
+					<td><strong>Total</strong></td>
+					<td class="text-right"><strong><?php echo SO::get_sales_count(); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining()); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(null)); ?></strong></td>
+				</tr>
+			</tbody>
+		</table>
 
-		<hr>
-
-		<h2>Laba <?php echo wp_date('F Y'); ?>: <?php echo SO::currency(SO::get_profit(0)); ?></h2>
-
-		<hr>
-
-		<h2>Pembelian belum diterima: <?php echo SO::get_undelivered_count('buy'); ?></h2>
-		<h2>Penjualan belum dikirim: <?php echo SO::get_undelivered_count('sell'); ?></h2>
 		<?php
 	}
 }
