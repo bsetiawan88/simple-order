@@ -235,6 +235,9 @@ class Simple_Order_Sell {
 					'total' => $d->amount
 				];
 			}
+
+			$profit_percentage = round($results[$i]->profit / $results[$i]->pay_amount * 100, 2);
+			$results[$i]->profit .= '-' . $profit_percentage;
 		}
 
 		$response['table'] = $results;

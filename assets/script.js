@@ -270,13 +270,19 @@ jQuery(function($) {
 			}
 		}
 
-		if ((prop == 'pay_amount' || prop == 'remaining' || prop == 'price' || prop == 'profit') && td.textContent != '') {
+		if ((prop == 'pay_amount' || prop == 'remaining' || prop == 'price') && td.textContent != '') {
 			td.style.textAlign = 'right';
 			td.textContent = currency(td.textContent);
 		}
 
 		if (prop == 'qty') {
 			td.style.textAlign = 'right';
+		}
+
+		if (prop == 'profit' && td.textContent != '') {
+			td.style.textAlign = 'right';
+			profit = value.split('-');
+			td.innerHTML = currency(profit[0]) + ' / ' + '<span style="color:blue;">' + profit[1] + '%</span>';
 		}
 
 		if (prop == 'action') {
