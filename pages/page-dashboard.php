@@ -35,7 +35,7 @@ class Simple_Order_Dashboard {
 		
 		<hr>
 
-		<table class="wp-list-table widefat striped table-view-list" style="width:40%!important;">
+		<table class="wp-list-table widefat striped table-view-list" style="width:45%!important;">
 			<thead>
 				<tr>
 					<th colspan="2">Aset</th>
@@ -63,7 +63,7 @@ class Simple_Order_Dashboard {
 
 		<hr>
 
-		<table class="wp-list-table widefat striped table-view-list" style="width:40%!important;">
+		<table class="wp-list-table widefat striped table-view-list" style="width:45%!important;">
 			<thead>
 				<tr>
 					<th colspan="2">Estimasi laba berdasarkan stok</th>
@@ -87,7 +87,7 @@ class Simple_Order_Dashboard {
 
 		<hr>
 
-		<table class="wp-list-table widefat striped table-view-list" style="width:40%!important;">
+		<table class="wp-list-table widefat striped table-view-list" style="width:45%!important;">
 			<thead>
 				<tr>
 					<th></th>
