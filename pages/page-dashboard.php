@@ -117,8 +117,8 @@ class Simple_Order_Dashboard {
 					<th style="width:70px">Penagihan (belum lunas)</th>
 					<th class="text-right">Jumlah penjualan</th>
 					<th class="text-right">Nominal penagihan</th>
-					<th class="text-right">Laba penagihan (belum lunas)</th>
-					<th class="text-right">Laba (penjualan lunas)</th>
+					<th class="text-right">Laba penagihan</th>
+					<th class="text-right">Laba akhir (penjualan lunas)</th>
 				</tr>
 			</thead>
 			<tbody>
