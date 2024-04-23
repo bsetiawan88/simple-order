@@ -79,6 +79,10 @@ class Simple_Order {
 		.text-right {
 			text-align: right!important;
 		}
+		.dashboard-item {
+			vertical-align:top;
+			width:45%!important;
+		}
 		</style>';
 		wp_enqueue_style('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.css');
 		wp_enqueue_script('handsontable', plugin_dir_url(__FILE__) . 'assets/handsontable.js');

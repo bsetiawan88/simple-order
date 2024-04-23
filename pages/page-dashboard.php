@@ -35,55 +35,57 @@ class Simple_Order_Dashboard {
 		
 		<hr>
 
-		<table class="wp-list-table widefat striped table-view-list" style="width:45%!important;">
-			<thead>
-				<tr>
-					<th colspan="2">Aset</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><strong>Saldo transfer</strong></td>
-					<td class="text-right"><strong><?php echo SO::currency($transfer); ?></strong></td>
-				</tr>
-				<tr>
-					<td><strong>Saldo tunai</strong></td>
-					<td class="text-right"><strong><?php echo SO::currency($cash); ?></strong></td>
-				</tr>
-				<tr>
-					<td><strong>Nilai stok</strong></td>
-					<td class="text-right"><strong><?php echo SO::currency($stock_value); ?></strong></td>
-				</tr>
-				<tr>
-					<td><strong>Total</strong></td>
-					<td class="text-right" style="color:red"><strong><?php echo SO::currency($transfer + $cash + $stock_value); ?></strong></td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="dashboard-item">
+			<table class="wp-list-table widefat striped table-view-list">
+				<thead>
+					<tr>
+						<th colspan="2">Aset</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><strong>Saldo transfer</strong></td>
+						<td class="text-right"><strong><?php echo SO::currency($transfer); ?></strong></td>
+					</tr>
+					<tr>
+						<td><strong>Saldo tunai</strong></td>
+						<td class="text-right"><strong><?php echo SO::currency($cash); ?></strong></td>
+					</tr>
+					<tr>
+						<td><strong>Nilai stok</strong></td>
+						<td class="text-right"><strong><?php echo SO::currency($stock_value); ?></strong></td>
+					</tr>
+					<tr>
+						<td><strong>Total</strong></td>
+						<td class="text-right" style="color:red"><strong><?php echo SO::currency($transfer + $cash + $stock_value); ?></strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-		<hr>
-
-		<table class="wp-list-table widefat striped table-view-list" style="width:45%!important;">
-			<thead>
-				<tr>
-					<th colspan="2">Estimasi laba berdasarkan stok</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><strong>Stok tersedia</strong></td>
-					<td class="text-right"><strong><?php echo SO::currency($stock_profit_value); ?></strong></td>
-				</tr>
-				<tr>
-					<td><strong>Stok belum diterima</strong></td>
-					<td class="text-right"><strong><?php echo SO::currency($stock_pending_profit_value); ?></strong></td>
-				</tr>
-				<tr>
-					<td><strong>Total</strong></td>
-					<td class="text-right" style="color:red"><strong><?php echo SO::currency($stock_profit_value + $stock_pending_profit_value); ?></strong></td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="dashboard-item">
+			<table class="wp-list-table widefat striped table-view-list">
+				<thead>
+					<tr>
+						<th colspan="2">Estimasi laba berdasarkan stok</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><strong>Stok tersedia</strong></td>
+						<td class="text-right"><strong><?php echo SO::currency($stock_profit_value); ?></strong></td>
+					</tr>
+					<tr>
+						<td><strong>Stok belum diterima</strong></td>
+						<td class="text-right"><strong><?php echo SO::currency($stock_pending_profit_value); ?></strong></td>
+					</tr>
+					<tr>
+						<td><strong>Total</strong></td>
+						<td class="text-right" style="color:red"><strong><?php echo SO::currency($stock_profit_value + $stock_pending_profit_value); ?></strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<hr>
 
