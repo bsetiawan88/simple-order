@@ -64,7 +64,7 @@ class Simple_Order_Finance {
 			$method = 'transfer';
 		}
 
-		$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->_FINANCE} WHERE method = %s ORDER BY id ASC LIMIT 100", $method));
+		$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->_FINANCE} WHERE method = %s ORDER BY id DESC LIMIT 150", $method));
 
 		if ($results) {
 			for ($i = 0; $i < count($results); $i++) {
