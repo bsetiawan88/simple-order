@@ -114,7 +114,7 @@ class Simple_Order_Dashboard {
 		<table class="wp-list-table widefat striped table-view-list" style="width:90%!important;">
 			<thead>
 				<tr>
-					<th style="width:70px"></th>
+					<th style="width:70px">Penagihan (belum lunas)</th>
 					<th class="text-right">Jumlah penjualan</th>
 					<th class="text-right">Nominal penagihan</th>
 					<th class="text-right">Laba penagihan (belum lunas)</th>
