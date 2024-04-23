@@ -92,7 +92,7 @@ class Simple_Order_Dashboard {
 				<tr>
 					<th></th>
 					<th class="text-right">Jumlah</th>
-					<th class="text-right">Nilai</th>
+					<th class="text-right">Nilai Aset</th>
 				</tr>
 			</thead>
 			<tbody>
