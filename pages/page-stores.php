@@ -33,7 +33,8 @@ class Simple_Order_Stores {
 				<label class="filter-label"><a class="expand-all" href="#">Detail</a></label>
 				<label class="filter-label"><a class="collapse-all" href="#">Ringkasan</a></label>
 			</div>
-			
+			<br/>
+
 			<div id="hot-sell"></div>
 			<?php
 		} else {
