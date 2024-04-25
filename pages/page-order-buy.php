@@ -84,7 +84,7 @@ class Simple_Order_Buy {
 			$query .= "P.delivery_status = 'pending'";
 		}
 
-		$query .= ' GROUP BY P.id';
+		$query .= ' GROUP BY P.id ORDER BY P.id DESC';
 
 		$results = $wpdb->get_results($query);
 
