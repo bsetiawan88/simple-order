@@ -281,8 +281,12 @@ jQuery(function($) {
 
 		if (prop == 'profit' && td.textContent != '') {
 			td.style.textAlign = 'right';
-			profit = value.split('-');
-			td.innerHTML = currency(profit[0]) + ' / ' + '<span style="color:blue;">' + profit[1] + '%</span>';
+			td.innerHTML = currency(value);
+		}
+
+		if (prop == 'profit_percentage' && value != null) {
+			td.style.textAlign = 'right';
+			td.innerHTML = '<span style="color:blue;">' + value + '%</span>';
 		}
 
 		if (prop == 'action') {
@@ -392,6 +396,16 @@ jQuery(function($) {
 		if (prop.indexOf('sales') != -1) {
 			td.style.textAlign = 'right';
 		}
+
+		if (prop == 'action') {
+			var type = instance.getDataAtCell(row, 1);
+			if (type == 'sell') {
+				var id = instance.getDataAtCell(row, 0);
+				var url = simple_order.admin_url + 'admin.php?page=simple-order-stores&id=' + id;
+				td.style.textAlign = 'center';
+				td.innerHTML += '<a style="margin-top:5px;" class="button button-primary" href="' + url + '">Riwayat</a>';
+			}
+		}
 	}
 	
 	
@@ -495,12 +509,19 @@ jQuery(function($) {
 		var query_string = window.location.search;
 		var url_params = new URLSearchParams(query_string);
 		var id = url_params.get('id');
+		var page = url_params.get('page');
 
+		var ajax_params = {};
 		if (typeof id != 'object') {
-			updater({id: id});
-		} else {
-			updater();
+			ajax_params.id = id;
 		}
+
+		if (typeof page != 'object') {
+			page = page.replace('simple-order-', '');
+			ajax_params.page = page;
+		}
+
+		updater(ajax_params);
 	}
 
 	if ($('#hot-sell-delivery').length > 0) {

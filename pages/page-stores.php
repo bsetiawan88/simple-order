@@ -19,26 +19,38 @@ class Simple_Order_Stores {
 	}
 
 	public function page() {
-		?>
-		<h1>Toko</h1>
-		<div id="hot-stores"></div>
-		<button class="button button-primary button-add" style="margin-top:10px">Tambah</button>
-		<p>Catatan:</p>
-		<ol>
-			<li>
-			Halaman ini digunakan untuk memilih toko saat pembelian atau penjualan.
-			</li>
-			<li>
-			Isi <code>buy</code> pada kolom <code>Tipe</code> untuk toko yang digunakan untuk pembelian.
-			</li>
-			<li>
-			Isi <code>sell</code> pada kolom <code>Tipe</code> untuk toko yang digunakan untuk penjualan.
-			</li>
-			<li>
-			Jika kolom <code>Tipe</code> tidak diisi, maka toko tidak akan tampil di halaman pembelian atau penjualan.
-			</li>
-		</ol>
-		<?php
+		global $wpdb;
+
+		if (isset($_GET['id'])) {
+			$store_id = sanitize_text_field($_GET['id']);
+
+			$store = SO::get($wpdb->_STORES, 'id', $store_id);
+			?>
+			<h1>Riwayat penjualan toko <?php echo $store->store_name; ?></h1>
+			<div id="hot-sell"></div>
+			<?php
+		} else {
+			?>
+			<h1>Toko</h1>
+			<div id="hot-stores"></div>
+			<button class="button button-primary button-add" style="margin-top:10px">Tambah</button>
+			<p>Catatan:</p>
+			<ol>
+				<li>
+				Halaman ini digunakan untuk memilih toko saat pembelian atau penjualan.
+				</li>
+				<li>
+				Isi <code>buy</code> pada kolom <code>Tipe</code> untuk toko yang digunakan untuk pembelian.
+				</li>
+				<li>
+				Isi <code>sell</code> pada kolom <code>Tipe</code> untuk toko yang digunakan untuk penjualan.
+				</li>
+				<li>
+				Jika kolom <code>Tipe</code> tidak diisi, maka toko tidak akan tampil di halaman pembelian atau penjualan.
+				</li>
+			</ol>
+			<?php
+		}
 	}
 
 	public function ajax() {
@@ -98,6 +110,15 @@ class Simple_Order_Stores {
 				}
 			}
 		}
+
+		$response['headers'][] = [
+			''
+		];
+
+		$response['columns'][] = [
+			'data' => 'action',
+			'readOnly' => true
+		];
 
 		$response['table'] = $results;
 

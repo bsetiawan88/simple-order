@@ -156,9 +156,9 @@ class Simple_Order_Sell {
 			<label for="filter1" class="filter-label"><input id="filter1" class="filter-button" data-action="unpaid" type="radio" name="opt" checked> Belum lunas</label>
 			<label for="filter2" class="filter-label"><input id="filter2" class="filter-button" data-action="pending" type="radio" name="opt"> Belum dikirim</label>
 			<label for="filter3" class="filter-label"><input id="filter3" class="filter-button" data-action="complete" type="radio" name="opt"> Selesai</label>
-
-			<a class="button button-table expand-all"><span class="dashicons dashicons-editor-expand"></span></a>
-			<a class="button button-table collapse-all"><span class="dashicons dashicons-editor-contract"></span></a>
+			 |
+			<label class="filter-label"><a class="expand-all" href="#">Detail</a></label>
+			<label class="filter-label"><a class="collapse-all" href="#">Ringkasan</a></label>
 		</div>
 
 		<br/>
@@ -181,13 +181,17 @@ class Simple_Order_Sell {
 		global $wpdb;
 
 		$response = [
-			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga jual', 'Jumlah', 'Nominal', 'Sisa bayar', 'Profit', 'Jadwal kirim', ''],
+			'headers' => ['ID', 'Tanggal', 'Toko', 'Produk', 'Harga jual', 'Jumlah', 'Nominal', 'Sisa bayar', 'Laba', 'Laba %', 'Jadwal kirim', ''],
 		];
 
 		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' ";
 
 		if (isset($_POST['id'])) {
-			$query .= ' AND P.id = ' . intval($_POST['id']);
+			if ($_POST['page'] == 'stores') {
+				$query .= ' AND S.id = ' . intval($_POST['id']);
+			} else {
+				$query .= ' AND P.id = ' . intval($_POST['id']);
+			}
 		} else if (isset($_POST['data'])) {
 			if ($_POST['data'] == 'pending') {
 				$query .= " AND P.delivery_status != 'complete'";
@@ -200,6 +204,8 @@ class Simple_Order_Sell {
 		} else {
 			$query .= " AND P.payment_status != 'complete'";
 		}
+
+		$query .= " ORDER BY P.id DESC LIMIT 100";
 
 		$results = $wpdb->get_results($query);
 
@@ -237,7 +243,7 @@ class Simple_Order_Sell {
 			}
 
 			$profit_percentage = round($results[$i]->profit / $results[$i]->pay_amount * 100, 2);
-			$results[$i]->profit .= '-' . $profit_percentage;
+			$results[$i]->profit_percentage = $profit_percentage;
 		}
 
 		$response['table'] = $results;
@@ -252,6 +258,7 @@ class Simple_Order_Sell {
 			['data' => 'pay_amount', 'readOnly' => true],
 			['data' => 'remaining', 'readOnly' => true],
 			['data' => 'profit', 'readOnly' => true],
+			['data' => 'profit_percentage', 'readOnly' => true],
 			['data' => 'delivery_scheduled_date', 'readOnly' => true],
 			['data' => 'action', 'readOnly' => true],
 		];
@@ -259,6 +266,14 @@ class Simple_Order_Sell {
 		if (isset($_POST['id']) || (isset($_POST['data']) && $_POST['data'] == 'complete')) {
 			$i = count($response['columns']) - 1;
 			unset($response['columns'][$i]);
+		}
+
+		if (isset($_POST['page']) && $_POST['page'] == 'stores') {
+			unset($response['columns'][2]);
+			unset($response['headers'][2]);
+
+			$response['headers'] = array_values($response['headers']);
+			$response['columns'] = array_values($response['columns']);
 		}
 
 		wp_send_json_success($response);

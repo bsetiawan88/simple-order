@@ -69,10 +69,11 @@ class Simple_Order {
 		.filter-label {
 			border: 1px solid black;
 			padding: 7px 12px;
-			margin-right: 10px;
+		}
+		.filter-label a {
+			text-decoration:none;
 		}
 		.button-table {
-			float:right;
 			padding-top:5px!important;
 			margin-right:5px;
 		}
