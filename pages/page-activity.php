@@ -245,7 +245,7 @@ class Simple_Order_Activity {
 			$row = '';
 
 			$row .= '<tr class="tr-produk" data-name="' . $row_data->product_name . '">';
-			$row .= '<td colspan="4"><input type="hidden" class="form-control" name="data[product_id][]" value="' . $row_data->id . '">' . $row_data->product_name . ' (stok: '. $row_data->stock_available . ')</td>';
+			$row .= '<td colspan="4"><input type="hidden" class="form-control" name="data[product_id][]" value="' . $row_data->id . '">' . $row_data->product_name . ' (stok: <span style="color:red">'. $row_data->stock_available . '</span>)</td>';
 			$row .= '</tr>';
 
 			$row .= '<tr class="tr-option" data-name="' . $row_data->product_name . '">';
