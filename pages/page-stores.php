@@ -27,6 +27,13 @@ class Simple_Order_Stores {
 			$store = SO::get($wpdb->_STORES, 'id', $store_id);
 			?>
 			<h1>Riwayat penjualan toko <?php echo $store->store_name; ?></h1>
+			<br/>
+
+			<div>
+				<label class="filter-label"><a class="expand-all" href="#">Detail</a></label>
+				<label class="filter-label"><a class="collapse-all" href="#">Ringkasan</a></label>
+			</div>
+			
 			<div id="hot-sell"></div>
 			<?php
 		} else {
