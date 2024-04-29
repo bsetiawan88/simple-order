@@ -172,7 +172,7 @@ class SO {
 
 		$query = "SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
 		if (isset($query_month)) {
-			$query .= $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
+			$query .= $wpdb->prepare(" AND MONTH (purchase_date) = %d)", $query_month);
 		}
 
 		$result = $wpdb->get_var($query);
