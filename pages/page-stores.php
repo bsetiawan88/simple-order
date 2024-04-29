@@ -114,7 +114,7 @@ class Simple_Order_Stores {
 
 				$count = SO::get_store_sales_count($results[$i]->id);
 				if ($count) {
-					$results[$i]->sales_0 = SO::currency(SO::get_sales_month($results[$i]->id)) . ' / ' . $count;
+					$results[$i]->sales_0 = SO::currency(SO::get_store_sales_month($results[$i]->id)) . ' / ' . $count;
 				}
 			}
 		}

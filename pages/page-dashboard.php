@@ -116,27 +116,33 @@ class Simple_Order_Dashboard {
 		<table class="wp-list-table widefat striped table-view-list" style="width:90%!important;">
 			<thead>
 				<tr>
-					<th>Penagihan (belum lunas)</th>
-					<th class="text-right">Jumlah penjualan</th>
+					<th></th>
+					<th class="text-right">Jumlah penjualan belum lunas</th>
+					<th class="text-right">Jumlah penjualan lunas</th>
 					<th class="text-right">Nominal penagihan</th>
 					<th class="text-right">Laba penagihan</th>
 					<th class="text-right">Laba akhir (penjualan lunas)</th>
+					<th class="text-right">Omzet</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td><strong><?php echo wp_date('F Y'); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::get_sales_count(0); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::get_sales_count(0, true); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(0)); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(0)); ?></strong></td>
 					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(0, true)); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(0)); ?></strong></td>
 				</tr>
 				<tr>
 					<td><strong><?php echo wp_date('F Y', strtotime('+1 months')); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::get_sales_count(1); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::get_sales_count(1, true); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(1)); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(1)); ?></strong></td>
 					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(1, true)); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(1)); ?></strong></td>
 				</tr>
 				<tr>
 					<td><strong>Total</strong></td>

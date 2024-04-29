@@ -70,8 +70,8 @@ class SO {
 			$where = $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
 
-		$pay_amount = $wpdb->get_var("SELECT sum(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status != 'complete' {$where}");
-		$paid = $wpdb->get_var("SELECT sum(amount) FROM {$wpdb->_FINANCE} WHERE purchase_id IN (
+		$pay_amount = $wpdb->get_var("SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status != 'complete' {$where}");
+		$paid = $wpdb->get_var("SELECT SUM(amount) FROM {$wpdb->_FINANCE} WHERE purchase_id IN (
 			SELECT id FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status != 'complete' {$where}
 		)");
 
@@ -118,7 +118,7 @@ class SO {
 			$query_month = date('m', strtotime("+$month months"));
 		}
 
-		$query = "SELECT sum(profit) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
+		$query = "SELECT SUM(profit) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
 		if (isset($query_month)) {
 			$query .= $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
@@ -129,9 +129,9 @@ class SO {
 			$query .= " AND payment_status != 'complete' ";
 		}
 
-		$profit = $wpdb->get_var($query);
+		$result = $wpdb->get_var($query);
 
-		return $profit;
+		return $result;
 	}
 
 	public static function get_sales_count($month = null, $completed = false) {
@@ -155,9 +155,35 @@ class SO {
 			$query .= " AND payment_status != 'complete' ";
 		}
 
-		$profit = $wpdb->get_var($query);
+		$result = $wpdb->get_var($query);
 
-		return $profit;
+		return $result;
+	}
+
+	public static function get_sales($month = null, $completed = false) {
+		global $wpdb;
+
+		$where = '';
+		if ($month === 0) {
+			$query_month = date('m', time());
+		} else if (!empty($month)) {
+			$query_month = date('m', strtotime("+$month months"));
+		}
+
+		$query = "SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
+		if (isset($query_month)) {
+			$query .= $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
+		}
+
+		if ($completed) {
+			$query .= " AND payment_status = 'complete' ";
+		} else {
+			$query .= " AND payment_status != 'complete' ";
+		}
+
+		$result = $wpdb->get_var($query);
+
+		return $result;
 	}
 
 	public static function calculate_profit() {
@@ -181,7 +207,7 @@ class SO {
 		return intval($wpdb->get_var("SELECT count(*) FROM {$wpdb->_PURCHASES} WHERE type = '{$type}' AND delivery_status != 'complete'"));
 	}
 
-	public static function get_sales_month($store_id, $month = 0) {
+	public static function get_store_sales_month($store_id, $month = 0) {
 		global $wpdb;
 
 		if (empty($month)) {
