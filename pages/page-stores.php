@@ -73,8 +73,6 @@ class Simple_Order_Stores {
 				$wpdb->insert($wpdb->_STORES, [
 					'store_name' => 'zzz toko baru'
 				]);
-
-				unset($response['headers']);
 			} else if ($_POST['method'] == 'update') {
 				$wpdb->update($wpdb->_STORES, 
 				[
@@ -84,9 +82,9 @@ class Simple_Order_Stores {
 				]);
 
 				SO::add_log('stores');
-
-				unset($response['headers']);
 			}
+
+			unset($response['headers']);
 		}
 
 		$response['columns'] = [
@@ -100,10 +98,12 @@ class Simple_Order_Stores {
 
 		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_STORES} ORDER BY type, store_name ASC");
 		if ($results) {
-			$response['headers'][] = [
-				'Omzet ' . date('F Y', time())
-			];
-
+			if (isset($response['headers'])) {
+				$response['headers'][] = [
+					'Omzet ' . date('F Y', time())
+				];
+			}
+			
 			$response['columns'][] = [
 				'data' => 'sales_0',
 				'readOnly' => true
@@ -119,9 +119,11 @@ class Simple_Order_Stores {
 			}
 		}
 
-		$response['headers'][] = [
-			''
-		];
+		if (isset($response['headers'])) {
+			$response['headers'][] = [
+				''
+			];
+		}
 
 		$response['columns'][] = [
 			'data' => 'action',

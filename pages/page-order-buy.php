@@ -178,6 +178,10 @@ class Simple_Order_Buy {
 							'amount' => $_POST['refund'],
 						];
 
+						if (!empty($_POST['keterangan'])) {
+							$data['note'] = sanitize_text_field($_POST['keterangan']);
+						}
+
 						SO::insert_finance($data);
 					}
 				}
@@ -234,16 +238,26 @@ class Simple_Order_Buy {
 					foreach ($purchase_details as $d) {
 						?>
 						<div class="form-group">
-							<label for="product-<?php echo $d->id; ?>"><?php echo $d->product_name; ?></label>
-							<input class="form-control" style="width:200px;" min="0" max="<?php echo $d->qty; ?>" type="number" id="product-<?php echo $d->id; ?>" name="product[<?php echo $d->product_id; ?>]" value="<?php echo $d->qty;?>" />
+							<label for="product-<?php echo $d->id; ?>"><?php echo $d->product_name; ?></label><br>
+							<a href="#" class="btn btn-info btn-min" style="display:inline">Min</a> <input class="form-control" style="width:200px;display:inline;" min="0" max="<?php echo $d->qty; ?>" type="number" id="product-<?php echo $d->id; ?>" name="product[<?php echo $d->product_id; ?>]" value="<?php echo $d->qty;?>" />
+							<a href="#" class="btn btn-info btn-max" style="display:inline">Max</a>
 						</div>
 						<?php
 					}
 					?>
 
 					<div class="form-group">
-						<label for="refund">Jumlah refund</label>
-						<input class="form-control" style="width:200px;" min="0" max="<?php echo $purchase->pay_amount; ?>" type="number" id="refund" name="refund" value="0" />
+						<label for="refund">Jumlah refund</label><br>
+						<a href="#" class="btn btn-info btn-min" style="display:inline">Min</a> 
+						<input class="form-control" style="width:200px;display:inline;" min="0" max="<?php echo $purchase->pay_amount; ?>" type="number" id="refund" name="refund" value="0" />
+						<a href="#" class="btn btn-info btn-max" style="display:inline">Max</a>
+					</div>
+
+					<br>
+
+					<div class="form-group">
+						<label for="keterangan">Catatan</label>
+						<textarea name="keterangan" id="keterangan" class="form-control"></textarea>
 					</div>
 					
 					<input class="btn btn-primary" type="submit" value="Kirim"/>

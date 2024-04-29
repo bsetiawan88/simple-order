@@ -547,4 +547,15 @@ jQuery(function($) {
 		nestedRowsPlugin = window.hot.getPlugin('nestedRows');
 		nestedRowsPlugin.collapsingUI.collapseAll();
 	});
+
+	$('.btn-min').on('click', function(e) {
+		e.preventDefault();
+		$(this).next().val(0);
+	});
+
+	$('.btn-max').on('click', function(e) {
+		e.preventDefault();
+		var value = $(this).prev().attr('max');
+		$(this).prev().val(value);
+	});
 });
