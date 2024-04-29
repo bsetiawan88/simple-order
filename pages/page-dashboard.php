@@ -133,7 +133,7 @@ class Simple_Order_Dashboard {
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(0)); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(0)); ?></strong></td>
 					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(0, true)); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(0)); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(0, true)); ?></strong></td>
 				</tr>
 				<tr>
 					<td><strong><?php echo wp_date('F Y', strtotime('+1 months')); ?></strong></td>
@@ -142,7 +142,7 @@ class Simple_Order_Dashboard {
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(1)); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(1)); ?></strong></td>
 					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(1, true)); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(1)); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(1, true)); ?></strong></td>
 				</tr>
 				<tr>
 					<td><strong>Total</strong></td>
