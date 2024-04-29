@@ -147,6 +147,7 @@ class Simple_Order_Dashboard {
 				<tr>
 					<td><strong>Total</strong></td>
 					<td class="text-right"><strong><?php echo SO::get_sales_count(); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::get_sales_count(null, true); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining()); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(null)); ?></strong></td>
 				</tr>
