@@ -96,25 +96,32 @@ class Simple_Order_Stores {
 			['data' => 'contact'],
 		];
 
+		$month_start = -1;
+
 		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_STORES} ORDER BY type, store_name ASC");
 		if ($results) {
 			if (isset($response['headers'])) {
-				$response['headers'][] = [
-					'Omzet ' . date('F Y', time())
-				];
+
+				for ($x = $month_start; $x <= 0; $x++) {
+					$response['headers'][] = [
+						'Omzet ' . SO::query_month($x, 'F Y')
+					];
+
+					$response['columns'][] = [
+						'data' => 'sales_' . ($x + 100),
+						'readOnly' => true
+					];
+				}
 			}
-			
-			$response['columns'][] = [
-				'data' => 'sales_0',
-				'readOnly' => true
-			];
 
 			for ($i = 0; $i < count($results); $i++) {
 				if ($results[$i]->type != 'sell') continue;
 
-				$count = SO::get_store_sales_count($results[$i]->id);
-				if ($count) {
-					$results[$i]->sales_0 = SO::currency(SO::get_store_sales_month($results[$i]->id)) . ' / ' . $count;
+				for ($x = $month_start; $x <= 0; $x++) {
+					$count = SO::get_store_sales_count($results[$i]->id, $x);
+					if ($count) {
+						$results[$i]->{'sales_' . ($x + 100)} = SO::currency(SO::get_store_sales_month($results[$i]->id, $x)) . ' / ' . $count;
+					}
 				}
 			}
 		}

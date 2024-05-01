@@ -60,13 +60,10 @@ class SO {
 		global $wpdb;
 
 		$where = '';
-		if ($month === 0) {
-			$query_month = date('m', time());
-		} else if (!empty($month)) {
-			$query_month = date('m', strtotime("+$month months"));
-		}
 
-		if (isset($query_month)) {
+		if (!is_null($month)) {
+			$query_month = self::query_month($month);
+
 			$where = $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
 
@@ -111,15 +108,9 @@ class SO {
 	public static function get_profit($month = null, $completed = false) {
 		global $wpdb;
 
-		$where = '';
-		if ($month === 0) {
-			$query_month = date('m', time());
-		} else if (!empty($month)) {
-			$query_month = date('m', strtotime("+$month months"));
-		}
-
 		$query = "SELECT SUM(profit) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
-		if (isset($query_month)) {
+		if (!is_null($month)) {
+			$query_month = self::query_month($month);
 			$query .= $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
 
@@ -137,15 +128,9 @@ class SO {
 	public static function get_sales_count($month = null, $completed = false) {
 		global $wpdb;
 
-		$where = '';
-		if ($month === 0) {
-			$query_month = date('m', time());
-		} else if (!empty($month)) {
-			$query_month = date('m', strtotime("+$month months"));
-		}
-
 		$query = "SELECT COUNT(*) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
-		if (isset($query_month)) {
+		if (!is_null($month)) {
+			$query_month = self::query_month($month);
 			$query .= $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
 
@@ -163,15 +148,9 @@ class SO {
 	public static function get_sales($month = null) {
 		global $wpdb;
 
-		$where = '';
-		if ($month === 0) {
-			$query_month = date('m', time());
-		} else if (!empty($month)) {
-			$query_month = date('m', strtotime("+$month months"));
-		}
-
 		$query = "SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' ";
-		if (isset($query_month)) {
+		if (!is_null($month)) {
+			$query_month = self::query_month($month);
 			$query .= $wpdb->prepare(" AND MONTH (purchase_date) = %d", $query_month);
 		}
 
@@ -201,28 +180,34 @@ class SO {
 		return intval($wpdb->get_var("SELECT count(*) FROM {$wpdb->_PURCHASES} WHERE type = '{$type}' AND delivery_status != 'complete'"));
 	}
 
+	public static function query_month($month = 0, $format = 'm') {
+		if (0 === $month) {
+			$time = time();
+		} else {
+			if ($month > 0) {
+				$month = '+' . $month;
+			}
+
+			$time = strtotime("$month months");
+		}
+
+		return wp_date($format, $time);
+	}
+
 	public static function get_store_sales_month($store_id, $month = 0) {
 		global $wpdb;
 
-		if (empty($month)) {
-			$month = date('m', time());
-		} else {
-			$month = date('m', strtotime("-$month months"));
-		}
+		$query_month = self::query_month($month);
 
-		return $wpdb->get_var($wpdb->prepare("SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE store_id = %d AND type = %s AND MONTH(purchase_date) = %d", $store_id, 'sell', $month));
+		return $wpdb->get_var($wpdb->prepare("SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE store_id = %d AND type = %s AND MONTH(purchase_date) = %d", $store_id, 'sell', $query_month));
 	}
 
 	public static function get_store_sales_count($store_id, $month = 0) {
 		global $wpdb;
 
-		if (empty($month)) {
-			$month = date('m', time());
-		} else {
-			$month = date('m', strtotime("-$month months"));
-		}
+		$query_month = self::query_month($month);
 
-		return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->_PURCHASES} WHERE store_id = %d AND type = %s AND MONTH(purchase_date) = %d", $store_id, 'sell', $month));
+		return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->_PURCHASES} WHERE store_id = %d AND type = %s AND MONTH(purchase_date) = %d", $store_id, 'sell', $query_month));
 	}
 
 	public static function update_stock($product_id, $field, $new_stock, $mode = 'increase') {

@@ -126,24 +126,21 @@ class Simple_Order_Dashboard {
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><strong><?php echo wp_date('F Y'); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::get_sales_count(0); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::get_sales_count(0, true); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(0)); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(0)); ?></strong></td>
-					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(0, true)); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(0)); ?></strong></td>
-				</tr>
-				<tr>
-					<td><strong><?php echo wp_date('F Y', strtotime('+1 months')); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::get_sales_count(1); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::get_sales_count(1, true); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining(1)); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(1)); ?></strong></td>
-					<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit(1, true)); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_sales(1)); ?></strong></td>
-				</tr>
+				<?php
+				for ($i = -1; $i <= 1; $i++) {
+					?>
+					<tr>
+						<td><strong><?php echo SO::query_month($i, 'F Y'); ?></strong></td>
+						<td class="text-right"><strong><?php echo SO::get_sales_count($i); ?></strong></td>
+						<td class="text-right"><strong><?php echo SO::get_sales_count($i, true); ?></strong></td>
+						<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining($i)); ?></strong></td>
+						<td class="text-right"><strong><?php echo SO::currency(SO::get_profit($i)); ?></strong></td>
+						<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit($i, true)); ?></strong></td>
+						<td class="text-right"><strong><?php echo SO::currency(SO::get_sales($i)); ?></strong></td>
+					</tr>
+					<?php
+				}
+				?>
 				<tr>
 					<td><strong>Total</strong></td>
 					<td class="text-right"><strong><?php echo SO::get_sales_count(); ?></strong></td>
