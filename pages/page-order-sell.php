@@ -108,6 +108,32 @@ class Simple_Order_Sell {
 					</script>
 				</div>
 				<?php
+			} else if (isset($_POST['cancel_confirm'])) {
+				$result = $wpdb->update($wpdb->_PURCHASES, [
+					'payment_status' => 'cancel',
+					'delivery_status' => 'cancel'
+				], [
+					'id' => $purchase_id
+				]);
+	
+				if ($result) {
+					$purchase_details = SO::gets($wpdb->_PURCHASE_DETAILS, 'purchase_id', $purchase_id);
+
+					foreach ($purchase_details as $d) {
+						SO::update_stock($d->product_id, 'available', $d->qty, 'increase');
+						SO::update_stock($d->product_id, 'pending_out', $d->qty, 'decrease');
+					}
+				}
+				?>
+				<div class="container mt-5">
+					<h1>Data sudah disimpan</h1>
+					<script>
+						setTimeout(function() {
+							window.location.href = '<?php echo admin_url('admin.php?page=simple-order-sell'); ?>';
+						}, 1000);
+					</script>
+				</div>
+				<?php
 			} else {
 				?>
 				<div class="container mt-5">
@@ -133,7 +159,7 @@ class Simple_Order_Sell {
 
 						<div class="form-group">
 							<label for="payment_date">Tanggal pembayaran</label>
-							<input type="payment_date" id="payment_date" name="payment_date" class="form-control datepicker" />
+							<input type="text" id="payment_date" name="payment_date" class="form-control datepicker" />
 						</div>
 
 						<div class="form-group">
@@ -142,6 +168,21 @@ class Simple_Order_Sell {
 						</div>
 
 						<input class="btn btn-primary" type="submit" value="Kirim"/>
+
+					</form>
+
+					<hr>
+
+					<h1>Form pembatalan</h1>
+
+					<form method="POST" style="margin-top:50px">
+
+						<div class="form-group">
+							<input type="checkbox" id="cancel_confirm" name="cancel_confirm" class="form-control" value="1" />
+							<label for="cancel_confirm">Konfirmasi pembatalan</label>
+						</div>
+
+						<input class="btn btn-primary" type="submit" value="Batalkan"/>
 
 					</form>
 				</div>
@@ -194,15 +235,15 @@ class Simple_Order_Sell {
 			}
 		} else if (isset($_POST['data'])) {
 			if ($_POST['data'] == 'pending') {
-				$query .= " AND P.delivery_status != 'complete'";
+				$query .= " AND P.delivery_status NOT IN ('complete', 'cancel')";
 			} else if ($_POST['data'] == 'unpaid') {
-				$query .= " AND P.payment_status != 'complete'";
+				$query .= " AND P.payment_status NOT IN ('complete', 'cancel')";
 			} else if ($_POST['data'] == 'complete') {
 				$query .= " AND P.delivery_status = 'complete' AND P.payment_status = 'complete'";
 			}
 			unset($response['headers']);
 		} else {
-			$query .= " AND P.payment_status != 'complete'";
+			$query .= " AND P.payment_status NOT IN ('complete', 'cancel')";
 		}
 
 		$query .= " ORDER BY P.id DESC LIMIT 100";
@@ -286,7 +327,7 @@ class Simple_Order_Sell {
 			'headers' => ['', 'ID', 'Tanggal', 'Toko', 'Produk', 'Jumlah', 'Nominal'],
 		];
 
-		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' AND P.delivery_status != 'complete' AND delivery_scheduled_date IS NULL";
+		$query = "SELECT P.*, S.store_name FROM {$wpdb->_PURCHASES} P LEFT JOIN {$wpdb->_STORES} S ON P.store_id = S.id WHERE P.type = 'sell' AND P.delivery_status NOT IN ('complete', 'cancel') AND delivery_scheduled_date IS NULL";
 
 		$results = $wpdb->get_results($query);
 

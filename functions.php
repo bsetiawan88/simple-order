@@ -46,7 +46,7 @@ class SO {
 	public static function get_remaining_payment($purchase_id) {
 		global $wpdb;
 
-		$purchase = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->_PURCHASES} WHERE id = %d AND type = %s AND payment_status != %s", $purchase_id, 'sell', 'complete'));
+		$purchase = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->_PURCHASES} WHERE id = %d AND type = %s AND payment_status NOT IN (%s, %s)", $purchase_id, 'sell', 'complete', 'cancel'));
 
 		return $purchase->pay_amount - $wpdb->get_var($wpdb->prepare("SELECT SUM(amount) FROM {$wpdb->_FINANCE} WHERE purchase_id = %d", $purchase_id));
 	}
@@ -67,9 +67,9 @@ class SO {
 			$where = $wpdb->prepare(" AND (MONTH(payment_scheduled_date) = %d OR (payment_scheduled_date IS NULL AND MONTH (purchase_date) = %d))", $query_month, $query_month);
 		}
 
-		$pay_amount = $wpdb->get_var("SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status != 'complete' {$where}");
+		$pay_amount = $wpdb->get_var("SELECT SUM(pay_amount) FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status NOT IN ('complete', 'cancel') {$where}");
 		$paid = $wpdb->get_var("SELECT SUM(amount) FROM {$wpdb->_FINANCE} WHERE purchase_id IN (
-			SELECT id FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status != 'complete' {$where}
+			SELECT id FROM {$wpdb->_PURCHASES} WHERE type = 'sell' AND payment_status NOT IN ('complete', 'cancel') {$where}
 		)");
 
 		$remaining = $pay_amount - $paid;
@@ -117,7 +117,7 @@ class SO {
 		if ($completed) {
 			$query .= " AND payment_status = 'complete' ";
 		} else {
-			$query .= " AND payment_status != 'complete' ";
+			$query .= " AND payment_status NOT IN ('complete', 'cancel') ";
 		}
 
 		$result = $wpdb->get_var($query);
@@ -137,7 +137,7 @@ class SO {
 		if ($completed) {
 			$query .= " AND payment_status = 'complete' ";
 		} else {
-			$query .= " AND payment_status != 'complete' ";
+			$query .= " AND payment_status NOT IN ('complete', 'cancel') ";
 		}
 
 		$result = $wpdb->get_var($query);
@@ -177,7 +177,7 @@ class SO {
 
 	public static function get_undelivered_count($type) {
 		global $wpdb;
-		return intval($wpdb->get_var("SELECT count(*) FROM {$wpdb->_PURCHASES} WHERE type = '{$type}' AND delivery_status != 'complete'"));
+		return intval($wpdb->get_var("SELECT count(*) FROM {$wpdb->_PURCHASES} WHERE type = '{$type}' AND delivery_status NOT IN ('complete', 'cancel')"));
 	}
 
 	public static function query_month($month = 0, $format = 'm') {

@@ -63,7 +63,7 @@ class Simple_Order_delivery {
 			}
 		}
 
-		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_PURCHASES} WHERE courier_id IS NOT NULL AND courier_id != 0 AND delivery_status != 'complete'");
+		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_PURCHASES} WHERE courier_id IS NOT NULL AND courier_id != 0 AND delivery_status NOT IN ('complete', 'cancel')");
 
 		for ($i = 0; $i < count($results); $i++) {
 			$results[$i]->delivery_scheduled_date = wp_date('l, d F Y', strtotime($results[$i]->delivery_scheduled_date));
