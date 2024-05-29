@@ -143,8 +143,8 @@ class Simple_Order_Dashboard {
 						<td class="text-right"><strong><?php echo SO::get_sales_count($i, true); ?></strong></td>
 						<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining($i)); ?></strong></td>
 						<td class="text-right"><strong><?php echo $profit; ?></strong></td>
-						<td class="text-right" style="color:red"><strong><?php echo $completed_profit; ?></strong></td>
-						<td class="text-right"><strong><?php echo SO::currency($profit + $completed_profit); ?></strong></td>
+						<td class="text-right" style="color:red"><strong><?php echo SO::currency($completed_profit); ?></strong></td>
+						<td class="text-right" style="color:green"><strong><?php echo SO::currency($profit + $completed_profit); ?></strong></td>
 						<td class="text-right"><strong><?php echo SO::currency(SO::get_sales($i)); ?></strong></td>
 					</tr>
 					<?php
