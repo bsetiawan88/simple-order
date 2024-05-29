@@ -30,6 +30,7 @@ class Simple_Order_Dashboard {
 		$stock_pending_out_value = SO::get_stock_pending_out_value();
 		$stock_profit_value = SO::get_stock_profit_value();
 		$stock_pending_profit_value = SO::get_stock_pending_profit_value();
+		$total_remaining = SO::get_total_remaining();
 		?>
 		<h1>Rangkuman</h1>
 		
@@ -58,6 +59,10 @@ class Simple_Order_Dashboard {
 					<tr>
 						<td><strong>Total</strong></td>
 						<td class="text-right" style="color:red"><strong><?php echo SO::currency($transfer + $cash + $stock_value); ?></strong></td>
+					</tr>
+					<tr>
+						<td><strong>Valuasi</strong></td>
+						<td class="text-right" style="color:red"><strong><?php echo SO::currency($transfer + $cash + $stock_value + $stock_pending_in_value + $total_remaining); ?></strong></td>
 					</tr>
 				</tbody>
 			</table>
@@ -145,7 +150,7 @@ class Simple_Order_Dashboard {
 					<td><strong>Total</strong></td>
 					<td class="text-right"><strong><?php echo SO::get_sales_count(); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::get_sales_count(null, true); ?></strong></td>
-					<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining()); ?></strong></td>
+					<td class="text-right"><strong><?php echo SO::currency($total_remaining); ?></strong></td>
 					<td class="text-right"><strong><?php echo SO::currency(SO::get_profit(null)); ?></strong></td>
 				</tr>
 			</tbody>
