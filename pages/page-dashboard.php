@@ -127,20 +127,24 @@ class Simple_Order_Dashboard {
 					<th class="text-right">Nominal penagihan</th>
 					<th class="text-right">Laba penagihan</th>
 					<th class="text-right">Laba akhir (penjualan lunas)</th>
+					<th class="text-right">Estimasi Laba</th>
 					<th class="text-right">Omzet</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php
 				for ($i = -1; $i <= 1; $i++) {
+					$profit = SO::get_profit($i);
+					$completed_profit = SO::currency(SO::get_profit($i, true));
 					?>
 					<tr>
 						<td><strong><?php echo SO::query_month($i, 'F Y'); ?></strong></td>
 						<td class="text-right"><strong><?php echo SO::get_sales_count($i); ?></strong></td>
 						<td class="text-right"><strong><?php echo SO::get_sales_count($i, true); ?></strong></td>
 						<td class="text-right"><strong><?php echo SO::currency(SO::get_total_remaining($i)); ?></strong></td>
-						<td class="text-right"><strong><?php echo SO::currency(SO::get_profit($i)); ?></strong></td>
-						<td class="text-right" style="color:red"><strong><?php echo SO::currency(SO::get_profit($i, true)); ?></strong></td>
+						<td class="text-right"><strong><?php echo $profit; ?></strong></td>
+						<td class="text-right" style="color:red"><strong><?php echo $completed_profit; ?></strong></td>
+						<td class="text-right"><strong><?php echo SO::currency($profit + $completed_profit); ?></strong></td>
 						<td class="text-right"><strong><?php echo SO::currency(SO::get_sales($i)); ?></strong></td>
 					</tr>
 					<?php
