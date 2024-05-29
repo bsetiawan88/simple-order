@@ -62,7 +62,7 @@ class Simple_Order_Dashboard {
 					</tr>
 					<tr>
 						<td><strong>Valuasi</strong></td>
-						<td class="text-right" style="color:red"><strong><?php echo SO::currency($transfer + $cash + $stock_value + $stock_pending_in_value + $total_remaining); ?></strong></td>
+						<td class="text-right" style="color:green"><strong><?php echo SO::currency($transfer + $cash + $stock_value + $stock_pending_in_value + $total_remaining); ?></strong></td>
 					</tr>
 				</tbody>
 			</table>
