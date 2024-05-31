@@ -188,7 +188,7 @@ class SO {
 				$month = '+' . $month;
 			}
 
-			$time = strtotime("$month months");
+			$time = strtotime("first day of $month months");
 		}
 
 		return wp_date($format, $time);
