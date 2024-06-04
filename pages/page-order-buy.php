@@ -96,7 +96,7 @@ class Simple_Order_Buy {
 
 			foreach ($details as $d) {
 				$results[$i]->__children[] = [
-					'product_name' => $d->product_name,
+					'product_name' => '[' . $d->product_id . '] ' . $d->product_name,
 					'price' => $d->price,
 					'qty' => $d->qty,
 					'total' => $d->amount
