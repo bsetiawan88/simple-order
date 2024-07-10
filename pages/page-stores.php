@@ -96,7 +96,7 @@ class Simple_Order_Stores {
 			['data' => 'contact'],
 		];
 
-		$month_start = -1;
+		$month_start = -3;
 
 		$results = $wpdb->get_results("SELECT * FROM {$wpdb->_STORES} ORDER BY type, store_name ASC");
 		if ($results) {

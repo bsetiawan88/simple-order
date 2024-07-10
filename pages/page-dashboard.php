@@ -133,7 +133,7 @@ class Simple_Order_Dashboard {
 			</thead>
 			<tbody>
 				<?php
-				for ($i = -2; $i <= 1; $i++) {
+				for ($i = -3; $i <= 1; $i++) {
 					$profit = SO::get_profit($i);
 					$completed_profit = SO::get_profit($i, true);
 					?>
